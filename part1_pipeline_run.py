@@ -89,7 +89,7 @@ if __name__ == '__main__':
                                    out_name = out_name, 
                                    q = q, 
                                    p = p, 
-                                   qualityFilter = qualityFilter
+                                   qualityFilter = qualityFilter,
                                    read = read)
     
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
