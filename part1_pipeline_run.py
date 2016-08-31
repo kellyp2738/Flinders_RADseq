@@ -6,7 +6,7 @@
 
 #### IMPORTS ####
 from integrated_denovo_pipeline import *
-from DBR_Parsing import *
+#from DBR_Parsing import *
 from assembled_DBR_filtering import *
 
 if __name__ == '__main__':
