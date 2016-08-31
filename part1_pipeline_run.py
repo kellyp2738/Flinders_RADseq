@@ -71,7 +71,7 @@ if __name__ == '__main__':
     q = 30
     p = 50
     read = '.assembled.fastq' # extension for pear-assembled reads
-    parallel_FASTQ_quality_filter(directory = filterInDir, 
+    parallel_FASTQ_quality_filter(in_dir = filterInDir, 
                                    out_dir = filterOutDir, 
                                    out_name = out_name, 
                                    q = q, 
