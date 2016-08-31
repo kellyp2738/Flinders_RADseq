@@ -29,9 +29,22 @@ if __name__ == '__main__':
         t.start()
     
     #########################################################################
-    ### INPUTS AND OUTPUTS                                                ###
+    ### PATHS TO EXECUTABLES                                              ###
     #########################################################################
     
+    #pearPath = 'pear-0.9.6-bin-64'
+	qualityFilter = 'fastq_quality_filter'
+	trimmer = 'fastx_trimmer'
+	demultiplexPath = 'fastx_barcode_splitter.pl'
+	denovo_path = 'denovo_map.pl'
+	stacks_executables = '/usr/lib/stacks/bin' # this is where ustacks lives, which should be all we need. other stacks scripts are in /opt/software/stacks-1.26/scripts
+	BWA = 'bwa'
+	samtoolsPath = 'samtools'
+	bcftoolsPath = 'bcftools'
+    
+    #########################################################################
+    ### INPUTS AND OUTPUTS                                                ###
+    #########################################################################
     
     #### PART 1: INITIAL ASSEMBLY AND DBR FILTERING
     # user only needs to specify parent directory; the remaining directories should be automatically generated
@@ -76,6 +89,7 @@ if __name__ == '__main__':
                                    out_name = out_name, 
                                    q = q, 
                                    p = p, 
+                                   qualityFilter = qualityFilter
                                    read = read)
     
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
