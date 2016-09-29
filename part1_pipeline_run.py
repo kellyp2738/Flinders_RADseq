@@ -81,8 +81,10 @@ if __name__ == '__main__':
     ### FUNCTION CALLS TO RUN THE PIPELINE                                ###
     #########################################################################
     
+    # CONCATENATE READ 1 WITH REVERSE OF READ 2
     parallel_concatenate(in_dir = catInDir, regexR1='R1', regexR2='R2', out_dir = catOutDir)
     
+    '''
     # QUALITY FILTER DATA
     out_name = '.qual_filtered' # gets appended to input file name
     q = 30
@@ -113,7 +115,6 @@ if __name__ == '__main__':
                           demultiplexPath = demultiplexPath,
                           startPoint = 'barcodes', 
                           out_prefix = out_prefix)
-'''
     ##### NEED TO DETERMINE THE FIRST AND LAST BASE TO RETAIN
     ##### ALIGN FROM THE END OF THE STRING AND KEEP SET NUMBER OF BASES
     ##### maybe something like last_base = -10, first_base = last base + 100 (or whatever)?
