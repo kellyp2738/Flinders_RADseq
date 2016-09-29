@@ -51,6 +51,8 @@ if __name__ == '__main__':
     parentDir = '/home/kpierce/AdelaideTicks/AllData'
     
     # the remaining directories are automatically generated from the parent directory
+    catInDir = parentDir
+    catOutDir = parentDir + '/cat_parallel/'
     filterInDir = parentDir
     filterOutDir =  parentDir + '/qual_filtered/'
     dbrInDir = filterOutDir
@@ -78,6 +80,10 @@ if __name__ == '__main__':
     #########################################################################
     ### FUNCTION CALLS TO RUN THE PIPELINE                                ###
     #########################################################################
+    
+    out_name = 'pear_merged_'
+    extra_params = '-m 309 -n 209'
+    parallel_concatenate(in_dir = catInDir, regexR1='R1', regexR2='R2', out_dir = catOutDir)
     
     # QUALITY FILTER DATA
     out_name = '.qual_filtered' # gets appended to input file name
