@@ -81,8 +81,6 @@ if __name__ == '__main__':
     ### FUNCTION CALLS TO RUN THE PIPELINE                                ###
     #########################################################################
     
-    out_name = 'pear_merged_'
-    extra_params = '-m 309 -n 209'
     parallel_concatenate(in_dir = catInDir, regexR1='R1', regexR2='R2', out_dir = catOutDir)
     
     # QUALITY FILTER DATA
@@ -108,10 +106,17 @@ if __name__ == '__main__':
     
     # DEMULTIPLEX
     out_prefix = '/demultiplexed_'
-    iterative_Demultiplex(in_dir = demultiplexInDir, 
-                          barcode_dir = '/home/pierce/CSU_ChronicWasting/RevisedBarcodes', 
-                          out_dir = demultiplexOutDir, 
+    iterative_Demultiplex2(in_dir = demultiplexInDir, 
+                          barcode_dir = '/home/kpierce/Flinders_RADseq/Barcodes', 
+                          out_dir = demultiplexOutDir,
+                          regexLibrary = 'IDX\d{1}',
+                          demultiplexPath = demultiplexPath,
+                          startPoint = 'barcodes' 
                           out_prefix = out_prefix)
+'''
+    ##### NEED TO DETERMINE THE FIRST AND LAST BASE TO RETAIN
+    ##### ALIGN FROM THE END OF THE STRING AND KEEP SET NUMBER OF BASES
+    ##### maybe something like last_base = -10, first_base = last base + 100 (or whatever)?
     
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
@@ -124,7 +129,7 @@ if __name__ == '__main__':
          last_base = last_base)
          
     ##### AFTER THE DATA ARE TRIMMED, SORT OUT BARCODE FILES TO GUIDE ASSEMBLY #####     
-'''    
+    
     # RUN USTACKS SIMULTANEOUSLY ON ALL LIBRARIES
     denovo_Ustacks(in_dir = stacksInDir, 
                   denovo_path = denovo_path, 
