@@ -111,7 +111,7 @@ if __name__ == '__main__':
                           out_dir = demultiplexOutDir,
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
-                          startPoint = 'barcodes' 
+                          startPoint = 'barcodes', 
                           out_prefix = out_prefix)
 '''
     ##### NEED TO DETERMINE THE FIRST AND LAST BASE TO RETAIN
