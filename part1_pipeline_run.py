@@ -49,7 +49,7 @@ if __name__ == '__main__':
     #### PART 1: INITIAL ASSEMBLY AND DBR FILTERING
     # user only needs to specify parent directory; the remaining directories should be automatically generated
     dataDir = '/home/kpierce/AdelaideTicks/AllData'
-    parentDir = '/mnt/sda1/"
+    parentDir = '/mnt/sda1/'
     
     # the remaining directories are automatically generated from the parent directory
     catInDir = dataDir
