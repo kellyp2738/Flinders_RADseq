@@ -48,10 +48,11 @@ if __name__ == '__main__':
     
     #### PART 1: INITIAL ASSEMBLY AND DBR FILTERING
     # user only needs to specify parent directory; the remaining directories should be automatically generated
-    parentDir = '/home/kpierce/AdelaideTicks/AllData'
+    dataDir = '/home/kpierce/AdelaideTicks/AllData'
+    parentDir = '/mnt/sda1/"
     
     # the remaining directories are automatically generated from the parent directory
-    catInDir = parentDir
+    catInDir = dataDir
     catOutDir = parentDir + '/cat_parallel/'
     filterInDir = parentDir
     filterOutDir =  parentDir + '/qual_filtered/'
