@@ -104,7 +104,7 @@ if __name__ == '__main__':
                                    read = read)
                                    
     # PASTE LIBRARIES SPLIT ACROSS LANES INTO A SINGLE FILE
-    parallel_merge_lanes(in_dir = ,
+    parallel_merge_lanes(in_dir = mergeLanesInDir,
                          regexLibrary = 'IDX\d{1}',
                          out_dir = 
     
