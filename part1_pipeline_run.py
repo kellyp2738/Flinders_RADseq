@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # PASTE LIBRARIES SPLIT ACROSS LANES INTO A SINGLE FILE
     parallel_merge_lanes(in_dir = mergeLanesInDir,
                          regexLibrary = 'IDX\d{1}',
-                         out_dir = 
+                         out_dir = mergeLanesOutDir)
     
     '''
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
@@ -198,4 +198,4 @@ if __name__ == '__main__':
              VCFout = finalVCFout,
              samtoolsPath = samtoolsPath,
              bcftoolsPath = bcftoolsPath)
-'''
+    '''
