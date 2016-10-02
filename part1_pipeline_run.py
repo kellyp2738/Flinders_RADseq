@@ -54,11 +54,13 @@ if __name__ == '__main__':
     # the remaining directories are automatically generated from the parent directory
     catInDir = dataDir
     catOutDir = parentDir + '/cat_parallel/'
-    filterInDir = parentDir
+    filterInDir = catOutDir
     filterOutDir =  parentDir + '/qual_filtered/'
-    dbrInDir = filterOutDir
+    mergeLanesInDir = filterOutDir
+    mergeLanesOutDir = parentDir + '/qual_filtered_merged_lanes/'
+    dbrInDir = mergeLanesOutDir
     dbrOutDir = parentDir + '/DBR_dir/'
-    demultiplexInDir = filterOutDir
+    demultiplexInDir = mergeLanesOutDir
     demultiplexOutDir = parentDir + '/demultiplexed/'
     trimInDir = demultiplexOutDir
     trimOutDir = parentDir + '/trimmed/'
@@ -82,10 +84,12 @@ if __name__ == '__main__':
     ### FUNCTION CALLS TO RUN THE PIPELINE                                ###
     #########################################################################
     
+    '''
+    # COMPLETED 10/2/2016
     # CONCATENATE READ 1 WITH REVERSE OF READ 2
     parallel_concatenate(in_dir = catInDir, regexR1='R1', regexR2='R2', out_dir = catOutDir)
-    
     '''
+    
     # QUALITY FILTER DATA
     out_name = '.qual_filtered' # gets appended to input file name
     q = 30
@@ -98,7 +102,13 @@ if __name__ == '__main__':
                                    p = p, 
                                    qualityFilter = qualityFilter,
                                    read = read)
+                                   
+    # PASTE LIBRARIES SPLIT ACROSS LANES INTO A SINGLE FILE
+    parallel_merge_lanes(in_dir = ,
+                         regexLibrary = 'IDX\d{1}',
+                         out_dir = 
     
+    '''
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
     seq_type = 'pear'
     parallel_DBR_dict(in_dir = dbrInDir, 
