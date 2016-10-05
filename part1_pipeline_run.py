@@ -53,7 +53,7 @@ if __name__ == '__main__':
     
     # the remaining directories are automatically generated from the parent directory
     catInDir = dataDir
-    catOutDir = parentDir + '/cat_parallel/'
+    catOutDir = os.path.join(parentDir, '/cat_parallel/')
     filterInDir = catOutDir
     filterOutDir =  parentDir + '/qual_filtered/'
     mergeLanesInDir = filterOutDir
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     out_name = '.qual_filtered' # gets appended to input file name
     q = 30
     p = 50
-    read = '.assembled.fastq' # extension for pear-assembled reads
+    read = '.cat' # extension for pear-assembled reads
     parallel_FASTQ_quality_filter(in_dir = filterInDir, 
                                    out_dir = filterOutDir, 
                                    out_name = out_name, 
