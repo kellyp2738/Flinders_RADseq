@@ -53,7 +53,7 @@ if __name__ == '__main__':
     
     # the remaining directories are automatically generated from the parent directory
     catInDir = dataDir
-    catOutDir = os.path.join(parentDir, '/cat_parallel/')
+    catOutDir = parentDir + '/cat_parallel/'
     filterInDir = catOutDir
     filterOutDir =  parentDir + '/qual_filtered/'
     mergeLanesInDir = filterOutDir
