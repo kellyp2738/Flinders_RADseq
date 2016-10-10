@@ -88,7 +88,7 @@ if __name__ == '__main__':
     # COMPLETED 10/2/2016
     # CONCATENATE READ 1 WITH REVERSE OF READ 2
     parallel_concatenate(in_dir = catInDir, regexR1='R1', regexR2='R2', out_dir = catOutDir)
-
+    '''
     # COMPLETED 10/10/2016 (-ish)
     # QUALITY FILTER DATA
     out_name = '.qual_filtered.gz' # gets appended to input file name
