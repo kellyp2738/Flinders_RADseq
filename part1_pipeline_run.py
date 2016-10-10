@@ -88,13 +88,20 @@ if __name__ == '__main__':
     # COMPLETED 10/2/2016
     # CONCATENATE READ 1 WITH REVERSE OF READ 2
     parallel_concatenate(in_dir = catInDir, regexR1='R1', regexR2='R2', out_dir = catOutDir)
+<<<<<<< HEAD
+<<<<<<< HEAD
     '''
+=======
     
+>>>>>>> d415d16d3ae445180e5ae37182c68c8279666ab5
+=======
+    
+>>>>>>> d415d16d3ae445180e5ae37182c68c8279666ab5
+    # COMPLETED 10/10/2016 (-ish)
     # QUALITY FILTER DATA
-    out_name = '.qual_filtered' # gets appended to input file name
+    out_name = '.qual_filtered.gz' # gets appended to input file name
     q = 30
     p = 50
-    read = '.cat' # extension for pear-assembled reads
     parallel_FASTQ_quality_filter(in_dir = filterInDir, 
                                    out_dir = filterOutDir, 
                                    out_name = out_name, 
@@ -102,10 +109,19 @@ if __name__ == '__main__':
                                    p = p, 
                                    qualityFilter = qualityFilter,
                                    read = read)
+<<<<<<< HEAD
+<<<<<<< HEAD
                                    
+=======
+    '''                               
+>>>>>>> d415d16d3ae445180e5ae37182c68c8279666ab5
+=======
+    '''                               
+>>>>>>> d415d16d3ae445180e5ae37182c68c8279666ab5
+    
     # PASTE LIBRARIES SPLIT ACROSS LANES INTO A SINGLE FILE
     parallel_merge_lanes(in_dir = mergeLanesInDir,
-                         regexLibrary = 'IDX\d{1}',
+                         regexLibrary = 'IDX[0-9]',
                          out_dir = mergeLanesOutDir)
     
     '''
