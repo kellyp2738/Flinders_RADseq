@@ -116,11 +116,11 @@ if __name__ == '__main__':
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
     # first the concatenated files must be moved to mergeLanesOutDir (they should have been written there initially!)
     seq_type = 'pear' # even though these aren't pear-merged, this is still the proper argument -- it tells the fxn that the reads are merged/concatenated
-    iterative_DBR_dict(in_dir = dbrInDir, 
+    parallel_DBR_dict(in_dir = dbrInDir, 
                        seqType = seq_type,
-                       save = dbrOutDir,
                        dbr_start = -10,
-                       dbr_stop = -2)
+                       dbr_stop = -2,
+                       save = dbrOutDir)
                        
     '''
 	# DEMULTIPLEX
