@@ -49,7 +49,7 @@ if __name__ == '__main__':
     #### PART 1: INITIAL ASSEMBLY AND DBR FILTERING
     # user only needs to specify parent directory; the remaining directories should be automatically generated
     dataDir = '/home/kpierce/AdelaideTicks/AllData'
-    parentDir = '/mnt/sda1/'
+    parentDir = '/mnt/HGST4TB/' # THIS CHANGED PART-WAY THROUGH THE ANALYSIS AS DATA WERE MOVED TO A BIGGER DRIVE
     
     # the remaining directories are automatically generated from the parent directory
     catInDir = dataDir
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     # COMPLETED 10/2/2016
     # CONCATENATE READ 1 WITH REVERSE OF READ 2
     parallel_concatenate(in_dir = catInDir, regexR1='R1', regexR2='R2', out_dir = catOutDir)
-    '''
+
     # COMPLETED 10/10/2016 (-ish)
     # QUALITY FILTER DATA
     out_name = '.qual_filtered.gz' # gets appended to input file name
@@ -102,24 +102,31 @@ if __name__ == '__main__':
                                    qualityFilter = qualityFilter,
                                    read = read
     
+    ## this isn't working, but was done manually with zcat
+    # zcat IDXn* > IDXn_qual_filtered_fully_concatenated.fq.gz
+    # saved in mergeLanesOutDir
+    # COMPLETED 10/14/2016
     # PASTE LIBRARIES SPLIT ACROSS LANES INTO A SINGLE FILE
     parallel_merge_lanes(in_dir = mergeLanesInDir,
                          regexLibrary = 'IDX[0-9]',
                          out_dir = mergeLanesOutDir)
-    
     '''
+    #
+    
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
-    seq_type = 'pear'
-    parallel_DBR_dict(in_dir = dbrInDir, 
+    # first the concatenated files must be moved to mergeLanesOutDir (they should have been written there initially!)
+    seq_type = 'pear' # even though these aren't pear-merged, this is still the proper argument -- it tells the fxn that the reads are merged/concatenated
+    iterative_DBR_dict(in_dir = dbrInDir, 
                        seqType = seq_type,
                        save = dbrOutDir,
                        dbr_start = -10,
                        dbr_stop = -2)
-    
-    # DEMULTIPLEX
+	
+	'''
+	# DEMULTIPLEX
     out_prefix = '/demultiplexed_'
     iterative_Demultiplex2(in_dir = demultiplexInDir, 
-                          barcode_dir = '/home/kpierce/Flinders_RADseq/Barcodes', 
+                          barcode_dir = '/mnt/HGST4TB/Flinders_RADseq/Barcodes', 
                           out_dir = demultiplexOutDir,
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
