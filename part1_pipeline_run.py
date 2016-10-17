@@ -58,10 +58,11 @@ if __name__ == '__main__':
     filterOutDir =  parentDir + '/qual_filtered/'
     mergeLanesInDir = filterOutDir
     mergeLanesOutDir = parentDir + '/qual_filtered_merged_lanes/'
-    #dbrInDir = mergeLanesOutDir
-    #dbrOutDir = parentDir + '/DBR_dir/'
-    dbrInDir = '/mnt/HGST4TB/dbr_debug'
-    dbrOutDir = parentDir + '/dbr_debug_output_dict/'
+    dbrInDir = mergeLanesOutDir
+    dbrOutDir = parentDir + '/DBR_dir/'
+    # for debugging only:
+    #dbrInDir = '/mnt/HGST4TB/dbr_debug'
+    #dbrOutDir = parentDir + '/dbr_debug_output_dict/'
     demultiplexInDir = mergeLanesOutDir
     demultiplexOutDir = parentDir + '/demultiplexed/'
     trimInDir = demultiplexOutDir
