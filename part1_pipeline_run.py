@@ -61,7 +61,7 @@ if __name__ == '__main__':
     #dbrInDir = mergeLanesOutDir
     #dbrOutDir = parentDir + '/DBR_dir/'
     dbrInDir = '/mnt/HGST4TB/dbr_debug'
-    dbrOutDir = dbrInDir + '/DBR_dir/'
+    dbrOutDir = parent + '/dbr_debug_output_dict/'
     demultiplexInDir = mergeLanesOutDir
     demultiplexOutDir = parentDir + '/demultiplexed/'
     trimInDir = demultiplexOutDir
