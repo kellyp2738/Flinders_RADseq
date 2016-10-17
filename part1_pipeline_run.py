@@ -120,6 +120,7 @@ if __name__ == '__main__':
                        seqType = seq_type,
                        dbr_start = -10,
                        dbr_stop = -2,
+                       test_dict = True,
                        save = dbrOutDir)
                        
     '''
