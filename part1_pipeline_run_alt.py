@@ -135,8 +135,7 @@ if __name__ == '__main__':
                           out_dir = demultiplexOutDir,
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
-                          startPoint = 'barcodes', 
-                          out_prefix = out_prefix)
+                          startPoint = 'barcodes')
     ##### NEED TO DETERMINE THE FIRST AND LAST BASE TO RETAIN
     ##### ALIGN FROM THE END OF THE STRING AND KEEP SET NUMBER OF BASES
     ##### maybe something like last_base = -10, first_base = last base + 100 (or whatever)?
