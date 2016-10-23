@@ -147,7 +147,7 @@ if __name__ == '__main__':
     last_base = -10
     parallel_Trim(in_dir = trimInDir, 
          out_dir = trimOutDir, 
-         trim_path = trimmer, 
+         trimPath = trimmer, 
          first_base = first_base, 
          last_base = last_base,
          suffix = suffix)
