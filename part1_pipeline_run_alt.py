@@ -131,7 +131,7 @@ if __name__ == '__main__':
     # DEMULTIPLEX
     out_prefix = '/demultiplexed_'
     iterative_Demultiplex2(in_dir = demultiplexInDir, 
-                          barcode_dir = '/mnt/HGST4TB/Flinders_RADseq/Barcodes', 
+                          barcode_dir = '/mnt/HGST4TB/Flinders_RADseq/Barcodes_First5', 
                           out_dir = demultiplexOutDir,
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
