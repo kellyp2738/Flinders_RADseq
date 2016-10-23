@@ -113,8 +113,8 @@ if __name__ == '__main__':
     parallel_merge_lanes(in_dir = mergeLanesInDir,
                          regexLibrary = 'IDX[0-9]',
                          out_dir = mergeLanesOutDir)
-    '''
-    #
+    
+    #COMPLETED FOR INDEX 1 ON 10/23/2016 -- TOOK APPROXIMATELY 11 HOURS TO PROCESS THAT 18GB FILE
     
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
     # first the concatenated files must be moved to mergeLanesOutDir (they should have been written there initially!)
@@ -128,7 +128,7 @@ if __name__ == '__main__':
                        save = dbrOutDir)
                        
     '''
-	# DEMULTIPLEX
+    # DEMULTIPLEX
     out_prefix = '/demultiplexed_'
     iterative_Demultiplex2(in_dir = demultiplexInDir, 
                           barcode_dir = '/mnt/HGST4TB/Flinders_RADseq/Barcodes', 
@@ -143,14 +143,16 @@ if __name__ == '__main__':
     
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
-    first_base = 11
-    last_base = 196
-    Trim(in_dir = trimInDir, 
+    first_base = -140
+    last_base = -10
+    parallel_Trim(in_dir = trimInDir, 
          out_dir = trimOutDir, 
-         suffix = suffix, 
+         trim_path = trimmer, 
          first_base = first_base, 
-         last_base = last_base)
-         
+         last_base = last_base,
+         suffix = suffix)
+    
+    '''     
     ##### AFTER THE DATA ARE TRIMMED, SORT OUT BARCODE FILES TO GUIDE ASSEMBLY #####     
     
     # RUN USTACKS SIMULTANEOUSLY ON ALL LIBRARIES
