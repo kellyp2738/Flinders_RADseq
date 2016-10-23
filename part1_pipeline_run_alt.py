@@ -127,7 +127,7 @@ if __name__ == '__main__':
                        test_dict = True,
                        save = dbrOutDir)
                        
-    '''
+    # COMPLETED 10/23/2016
     # DEMULTIPLEX
     out_prefix = '/demultiplexed_'
     iterative_Demultiplex2(in_dir = demultiplexInDir, 
@@ -136,14 +136,12 @@ if __name__ == '__main__':
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
                           startPoint = 'barcodes')
-    ##### NEED TO DETERMINE THE FIRST AND LAST BASE TO RETAIN
-    ##### ALIGN FROM THE END OF THE STRING AND KEEP SET NUMBER OF BASES
-    ##### maybe something like last_base = -10, first_base = last base + 100 (or whatever)?
-    
+    '''
+                          
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
-    first_base = -140
-    last_base = -10
+    first_base = -136 #max 9-mer sample ID, 4-mer restriction overhang
+    last_base = -15 #8-mer DBR, 2 spacer Cs, 4-mer restriction overhang
     parallel_Trim(in_dir = trimInDir, 
          out_dir = trimOutDir, 
          trimPath = trimmer, 
