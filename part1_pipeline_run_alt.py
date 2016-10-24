@@ -149,7 +149,7 @@ if __name__ == '__main__':
          last_base = last_base,
          suffix = suffix)
     
-    '''     
+    '''
     ##### AFTER THE DATA ARE TRIMMED, SORT OUT BARCODE FILES TO GUIDE ASSEMBLY #####     
     
     # RUN USTACKS SIMULTANEOUSLY ON ALL LIBRARIES
