@@ -147,7 +147,8 @@ if __name__ == '__main__':
          trimPath = trimmer, 
          first_base = first_base, 
          last_base = last_base,
-         suffix = suffix)
+         suffix = suffix,
+         execute = False)
     
     '''
     ##### AFTER THE DATA ARE TRIMMED, SORT OUT BARCODE FILES TO GUIDE ASSEMBLY #####     
