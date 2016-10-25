@@ -37,7 +37,7 @@ if __name__ == '__main__':
 	trimmer = 'fastx_trimmer'
 	demultiplexPath = 'fastx_barcode_splitter.pl'
 	denovo_path = 'denovo_map.pl'
-	stacks_executables = '/usr/lib/stacks/bin' # this is where ustacks lives, which should be all we need. other stacks scripts are in /opt/software/stacks-1.26/scripts
+	stacks_executables = '/usr/lib/stacks/bin' # this is where ustacks and cstacks live, which should be all we need. other stacks scripts are in /opt/software/stacks-1.26/scripts
 	BWA = 'bwa'
 	samtoolsPath = 'samtools'
 	bcftoolsPath = 'bcftools'
@@ -69,11 +69,11 @@ if __name__ == '__main__':
     trimInDir = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Legs'
     trimOutDir = parentDir + '/trimmed_legs/'
     
-    #stacksInDir = trimOutDir
-    #stacksOutDir = parentDir + '/StacksOutput/' # stacks doesn't allow an output to be specified
-    #pseudorefInDir = stacksOutDir
-    #pseudorefOutDir = parentDir + '/pseudoreference.fastq'
-    #BWAoutDir = parentDir + '/BWA/'
+    stacksInDir = trimOutDir
+    stacksOutDir = parentDir + '/Stacks_Legs_Output/' # stacks doesn't allow an output to be specified
+    pseudorefInDir = stacksOutDir
+    pseudorefOutDir = parentDir + '/pseudoreference.fastq'
+    BWAoutDir = parentDir + '/BWA/'
     #DBRfilteredseqs = parentDir + '/dbrFiltered/'
     
     #### PART 2: REASSEMBLING THE FILTERED SEQUENCES
@@ -128,7 +128,8 @@ if __name__ == '__main__':
                        test_dict = True,
                        save = dbrOutDir)
                        
-    # COMPLETED 10/23/2016
+    # COMPLETED 10/24/2016 USING NOT THIS FUNCTION!!!
+    # A BASH SCRIPT WAS USED TO RUN A BUNCH OF CALLS TO GBSX DEMULTIPLEXER INSTEAD OF USING THIS FASTX BARCODE SPLITTER WRAPPER
     # DEMULTIPLEX
     out_prefix = '/demultiplexed_'
     iterative_Demultiplex2(in_dir = demultiplexInDir, 
@@ -137,7 +138,7 @@ if __name__ == '__main__':
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
                           startPoint = 'barcodes')
-    '''
+    
                           
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
@@ -172,12 +173,13 @@ if __name__ == '__main__':
                   n = 2, 
                   b = 1, 
                   D = '_initial_assembly')
-    
+                  
+    '''
     # GENERATE THE PSEUDOREFERENCE GENOME
     GeneratePseudoref(in_dir = pseudorefInDir, 
                       out_file = pseudorefOutDir,  
                       BWA_path = BWA) # imported from integrated_denovo_pipeline.py
-    
+                      
     # REFERENCE MAP QUALITY FILTERED/DEMULTIPLEXED MERGED READS TO THE PSEUDOREFERENCE
     parallel_refmap_BWA(in_dir = trimOutDir, # input demultiplexed, trimmed reads
                out_dir = BWAoutDir, 
