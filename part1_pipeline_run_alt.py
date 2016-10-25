@@ -141,7 +141,7 @@ if __name__ == '__main__':
                           
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
-    first_base = 0 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer
+    first_base = 1 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer
     last_base = 123 # this is the number of bases left after the longest barcode + other sequences are removed: 150bp read length - 9mer barcode (max) - 4mer R1 cut - 4mer R2 cut - 10mer DBR = 123
     parallel_Trim(in_dir = trimInDir, 
          out_dir = trimOutDir, 
