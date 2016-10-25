@@ -140,6 +140,7 @@ if __name__ == '__main__':
                           startPoint = 'barcodes')
     
                           
+    # COMPLETED IN THE WEE HOURS OF 10/25/2016
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
     first_base = 1 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer
@@ -151,9 +152,8 @@ if __name__ == '__main__':
          last_base = last_base,
          suffix = suffix)
     
-    '''
-    ##### AFTER THE DATA ARE TRIMMED, SORT OUT BARCODE FILES TO GUIDE ASSEMBLY #####     
-    
+    # COMPLETED 10/25/2016, BUT PROGRAM DIDN'T EXIT OR PROCEED TO denovo_Cstacs()
+    # I think the function needs a return?
     # RUN USTACKS SIMULTANEOUSLY ON ALL LIBRARIES
     denovo_Ustacks(in_dir = stacksInDir, 
                   denovo_path = denovo_path, 
@@ -163,6 +163,7 @@ if __name__ == '__main__':
                   n = 2, 
                   b = 1, 
                   D = '_initial_assembly')
+    '''
     
     # RUN CSTACKS SIMULTANEOUSLY ON ALL LIBRARIES (same args as above)
     denovo_Cstacks(in_dir = stacksInDir, 
