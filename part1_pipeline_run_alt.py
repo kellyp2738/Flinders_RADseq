@@ -63,10 +63,11 @@ if __name__ == '__main__':
     # for debugging only:
     #dbrInDir = '/mnt/HGST4TB/dbr_debug'
     #dbrOutDir = parentDir + '/dbr_debug_output_dict/'
-    demultiplexInDir = mergeLanesOutDir
-    demultiplexOutDir = parentDir + '/demultiplexed/'
-    trimInDir = demultiplexOutDir
-    trimOutDir = parentDir + '/trimmed/'
+    # demultiplexing done with GBSX using a shell script (no python wrapper yet)
+    #demultiplexInDir = mergeLanesOutDir
+    #demultiplexOutDir = parentDir + '/demultiplexed/'
+    trimInDir = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Legs'
+    trimOutDir = parentDir + '/trimmed_legs/'
     
     #stacksInDir = trimOutDir
     #stacksOutDir = parentDir + '/StacksOutput/' # stacks doesn't allow an output to be specified
@@ -140,15 +141,14 @@ if __name__ == '__main__':
                           
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
-    first_base = -136 #max 9-mer sample ID, 4-mer restriction overhang
-    last_base = -15 #8-mer DBR, 2 spacer Cs, 4-mer restriction overhang
+    first_base = 0 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer
+    last_base = 123 # this is the number of bases left after the longest barcode + other sequences are removed: 150bp read length - 9mer barcode (max) - 4mer R1 cut - 4mer R2 cut - 10mer DBR = 123
     parallel_Trim(in_dir = trimInDir, 
          out_dir = trimOutDir, 
          trimPath = trimmer, 
          first_base = first_base, 
          last_base = last_base,
-         suffix = suffix,
-         execute = False)
+         suffix = suffix)
     
     '''
     ##### AFTER THE DATA ARE TRIMMED, SORT OUT BARCODE FILES TO GUIDE ASSEMBLY #####     
