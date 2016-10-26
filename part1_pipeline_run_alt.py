@@ -151,7 +151,7 @@ if __name__ == '__main__':
          first_base = first_base, 
          last_base = last_base,
          suffix = suffix)
-    
+    '''
     # COMPLETED 10/25/2016, BUT PROGRAM DIDN'T EXIT OR PROCEED TO denovo_Cstacs()
     # I think the function needs a return?
     # RUN USTACKS SIMULTANEOUSLY ON ALL LIBRARIES
@@ -162,8 +162,9 @@ if __name__ == '__main__':
                   m = 10, 
                   n = 2, 
                   b = 1, 
-                  D = '_initial_assembly')
-    '''
+                  D = '_initial_assembly',
+                  unmatchedName = 'undetermined')
+
     
     # RUN CSTACKS SIMULTANEOUSLY ON ALL LIBRARIES (same args as above)
     denovo_Cstacks(in_dir = stacksInDir, 
