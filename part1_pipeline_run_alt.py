@@ -165,7 +165,7 @@ if __name__ == '__main__':
                   D = '_initial_assembly',
                   unmatchedName = 'undetermined')
 
-    
+    # COMPLETED 10/26/2016
     # RUN CSTACKS SIMULTANEOUSLY ON ALL LIBRARIES (same args as above)
     denovo_Cstacks(in_dir = stacksInDir, 
                   denovo_path = denovo_path, 
@@ -175,31 +175,34 @@ if __name__ == '__main__':
                   n = 2, 
                   b = 1, 
                   D = '_initial_assembly')
-    '''              
-
+                  
+    # COMPLETED 10/26/2016          
     # GENERATE THE PSEUDOREFERENCE GENOME
     GeneratePseudoref(in_dir = pseudorefInDir, 
                       out_file = pseudorefOutDir,  
                       BWA_path = BWA) # imported from integrated_denovo_pipeline.py
                       
+    # COMPLETED 10/26/2016
     # REFERENCE MAP QUALITY FILTERED/DEMULTIPLEXED MERGED READS TO THE PSEUDOREFERENCE
     parallel_refmap_BWA(in_dir = trimOutDir, # input demultiplexed, trimmed reads
                out_dir = BWAoutDir, 
                BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
                pseudoref_full_path = pseudorefOutDir)
-    '''    
-    # FILTER OUT PCR DUPLICATES USING THE DBR SEQUENCES
-    DBR_Filter(assembled_dir = BWAoutDir, # the SAM files for the data mapped to pseudoreference
-               out_dir = DBRfilteredseqs, # the output file, full path, ending with .fasta
-               n_expected = 2, # the number of differences to be tolerated
-               barcode_dir = '/home/pierce/CSU_ChronicWasting/RevisedBarcodes', # the barcodes for individuals in the library referenced in dict_in
-               dict_dir = dbrOutDir, # a single dictionary of DBRs (for one library only)
-               sample_regex = '.*_(\d{1,3}T?)_.*',
-               barcode_file=None, # if just a single library is being used, can directly pass the barcode file
-               test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
-               phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
-               samMapLen=None)
     
+    ## NOT DONE ##
+    # FILTER OUT PCR DUPLICATES USING THE DBR SEQUENCES
+    #DBR_Filter(assembled_dir = BWAoutDir, # the SAM files for the data mapped to pseudoreference
+    #           out_dir = DBRfilteredseqs, # the output file, full path, ending with .fasta
+    #           n_expected = 2, # the number of differences to be tolerated
+    #           barcode_dir = '/home/pierce/CSU_ChronicWasting/RevisedBarcodes', # the barcodes for individuals in the library referenced in dict_in
+    #           dict_dir = dbrOutDir, # a single dictionary of DBRs (for one library only)
+    #           sample_regex = '.*_(\d{1,3}T?)_.*',
+    #           barcode_file=None, # if just a single library is being used, can directly pass the barcode file
+    #           test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
+    #           phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
+    #           samMapLen=None)
+    
+    # COMPLETED 10/26/2016 -- ****UNFILTERED READS****
     # REFERENCE MAP DBR FILTERED READS TO THE PSEUDOREFERENCE
     parallel_refmap_BWA(in_dir = re_BWAinDir, # input demultiplexed, trimmed reads
                out_dir = re_BWAoutDir, 
