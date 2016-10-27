@@ -207,7 +207,7 @@ if __name__ == '__main__':
                pseudoref_full_path = pseudorefOutDir)
     '''
     # CALL THE GENOTYPES USING SAMTOOLS MPILEUP; CONVERT OUTPUT TO VCF FILE
-    callGeno(sam_in = re_BWAoutDir, 
+    callGeno(sam_in = BWAoutDir, 
              pseudoref = pseudorefOutDir, 
              BCFout = finalBCFout, 
              VCFout = finalVCFout,
