@@ -72,8 +72,8 @@ if __name__ == '__main__':
     stacksInDir = trimOutDir
     stacksOutDir = parentDir + '/Stacks_Legs_Output/' # stacks doesn't allow an output to be specified
     pseudorefInDir = stacksOutDir
-    pseudorefOutDir = parentDir + '/pseudoreference.fastq'
-    BWAoutDir = parentDir + '/BWA/'
+    pseudorefOutDir = parentDir + '/Legs_pseudoreference.fastq'
+    BWAoutDir = parentDir + '/BWA_Legs/'
     #DBRfilteredseqs = parentDir + '/dbrFiltered/'
     
     #### PART 2: REASSEMBLING THE FILTERED SEQUENCES
@@ -81,8 +81,8 @@ if __name__ == '__main__':
     #re_demultiplexOutDir = parentDir + '/dbrFiltered_demultiplexed/'
     #re_BWAinDir = DBRfilteredseqs
     #re_BWAoutDir = parentDir + '/dbrFiltered_BWA2/'
-    #finalBCFout = parentDir + '/dbrFiltered_pseudorefMapped_genotypes2.bcf'
-    #finalVCFout = parentDir + '/dbrFiltered_pseudorefMapped_genotypes2.vcf'
+    finalBCFout = parentDir + '/Legs_pseudorefMapped_genotypes.bcf'
+    finalVCFout = parentDir + '/Legs_pseudorefMapped_genotypes.vcf'
     
     #########################################################################
     ### FUNCTION CALLS TO RUN THE PIPELINE                                ###
@@ -151,7 +151,7 @@ if __name__ == '__main__':
          first_base = first_base, 
          last_base = last_base,
          suffix = suffix)
-    '''
+
     # COMPLETED 10/25/2016, BUT PROGRAM DIDN'T EXIT OR PROCEED TO denovo_Cstacs()
     # I think the function needs a return?
     # RUN USTACKS SIMULTANEOUSLY ON ALL LIBRARIES
@@ -175,8 +175,8 @@ if __name__ == '__main__':
                   n = 2, 
                   b = 1, 
                   D = '_initial_assembly')
-                  
-    '''
+    '''              
+
     # GENERATE THE PSEUDOREFERENCE GENOME
     GeneratePseudoref(in_dir = pseudorefInDir, 
                       out_file = pseudorefOutDir,  
@@ -187,7 +187,7 @@ if __name__ == '__main__':
                out_dir = BWAoutDir, 
                BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
                pseudoref_full_path = pseudorefOutDir)
-        
+    '''    
     # FILTER OUT PCR DUPLICATES USING THE DBR SEQUENCES
     DBR_Filter(assembled_dir = BWAoutDir, # the SAM files for the data mapped to pseudoreference
                out_dir = DBRfilteredseqs, # the output file, full path, ending with .fasta
@@ -205,7 +205,7 @@ if __name__ == '__main__':
                out_dir = re_BWAoutDir, 
                BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
                pseudoref_full_path = pseudorefOutDir)
-    
+    '''
     # CALL THE GENOTYPES USING SAMTOOLS MPILEUP; CONVERT OUTPUT TO VCF FILE
     callGeno(sam_in = re_BWAoutDir, 
              pseudoref = pseudorefOutDir, 
@@ -213,4 +213,3 @@ if __name__ == '__main__':
              VCFout = finalVCFout,
              samtoolsPath = samtoolsPath,
              bcftoolsPath = bcftoolsPath)
-    '''
