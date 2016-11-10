@@ -66,7 +66,8 @@ if __name__ == '__main__':
     ### FUNCTION CALLS TO RUN THE PIPELINE                                ###
     #########################################################################
 
-
+    '''
+    # completed 11/9/2016
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
     first_base = 1 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer
@@ -83,7 +84,7 @@ if __name__ == '__main__':
                out_dir = BWAoutDir, 
                BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
                pseudoref_full_path = pseudorefOutDir)
-               
+    '''           
     # CALL THE GENOTYPES USING SAMTOOLS MPILEUP; CONVERT OUTPUT TO VCF FILE
     callGeno(sam_in = BWAoutDir, 
              pseudoref = pseudorefOutDir, 
