@@ -71,7 +71,7 @@ if __name__ == '__main__':
     #dbrInDir = '/mnt/HGST4TB/dbr_debug'
     #dbrOutDir = parentDir + '/dbr_debug_output_dict/'
     
-    trimInDir = dbrOutDir
+    trimInDir = '/mnt/HGST4TB/demultiplexed_testing_data'
     trimOutDir = parentDir + '/trimmed_testing_bodies/'
     
     stacksInDir = trimOutDir
@@ -135,22 +135,15 @@ if __name__ == '__main__':
                           demultiplexPath = demultiplexPath,
                           startPoint = 'barcodes')
     '''
+    # COMPLETED FOR 65 SAMPLE TEST SET ON 6/23/2017 (10 MIN RUN TIME)
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
-    seq_type = 'pear' # even though these aren't pear-merged, this is still the proper argument -- it tells the fxn that the reads are merged/concatenated
-    parallel_DBR_dict(in_dir = dbrInDir, 
-                      seqType = seq_type, 
-                      dbr_start = -10, 
-                      dbr_stop = -2, 
-                      test_dict = True, 
-                      save = dbrOutDir)
-    
-    #DBR_dict(in_dir = dbrInDir,
-    #                   in_file = 'IDX1_qual_filtered_fully_concatenated.fq', 
-    #                   #seqType = seq_type,
-    #                   dbr_start = -10,
-    #                   dbr_stop = -2,
-    #                   test_dict = True,
-    #                   save = dbrOutDir)
+    #seq_type = 'pear' # even though these aren't pear-merged, this is still the proper argument -- it tells the fxn that the reads are merged/concatenated
+    #parallel_DBR_dict(in_dir = dbrInDir, 
+    #                  seqType = seq_type, 
+    #                  dbr_start = -10, 
+    #                  dbr_stop = -2, 
+    #                  test_dict = True, 
+    #                  save = dbrOutDir)
                           
     ## DO NOT REDO THIS STEP FOR LEGS AND BODIES
     ## ONLY TRIM LARVAL SEQUENCES (NOT YET DONE)
