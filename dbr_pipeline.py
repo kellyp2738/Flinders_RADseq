@@ -49,7 +49,7 @@ if __name__ == '__main__':
     #### PART 1: INITIAL ASSEMBLY AND DBR FILTERING
     # user only needs to specify parent directory; the remaining directories should be automatically generated
     #dataDir = '/home/kpierce/AdelaideTicks/AllData'
-    parentDir = '/mnt/HGST4TB/demultiplexed_testing_sample' # THIS CHANGED PART-WAY THROUGH THE ANALYSIS AS DATA WERE MOVED TO A BIGGER DRIVE
+    parentDir = '/mnt/HGST4TB/demultiplexed_testing_output' # THIS CHANGED PART-WAY THROUGH THE ANALYSIS AS DATA WERE MOVED TO A BIGGER DRIVE
     
     # the remaining directories are automatically generated from the parent directory
     #catInDir = dataDir
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     #demultiplexInDir = mergeLanesOutDir
     #demultiplexOutDir = parentDir + '/demultiplexed/'
     
-    dbrInDir = '/mnt/HGST4TB/demultiplexed_testing_sample'
+    dbrInDir = '/mnt/HGST4TB/demultiplexed_testing_data'
     dbrOutDir = parentDir + '/DBR_dir_by_sample/'
     # for debugging only:
     #dbrInDir = '/mnt/HGST4TB/dbr_debug'
