@@ -82,13 +82,13 @@ if __name__ == '__main__':
     
     BWAoutDir = parentDir + '/BWA_testing_bodies/'
     
-    #DBRfilteredseqs = parentDir + '/dbrFiltered/'
+    DBRfilteredseqs = parentDir + '/dbrFiltered/'
     
     #### PART 2: REASSEMBLING THE FILTERED SEQUENCES
-    #re_demultiplexInDir = DBRfilteredseqs
-    #re_demultiplexOutDir = parentDir + '/dbrFiltered_demultiplexed/'
-    #re_BWAinDir = DBRfilteredseqs
-    #re_BWAoutDir = parentDir + '/dbrFiltered_BWA2/'
+    re_demultiplexInDir = DBRfilteredseqs
+    re_demultiplexOutDir = parentDir + '/dbrFiltered_demultiplexed/'
+    re_BWAinDir = DBRfilteredseqs
+    re_BWAoutDir = parentDir + '/dbrFiltered_BWA2/'
     finalBCFout = parentDir + '/testing_bodies_pseudorefMapped_genotypes.bcf'
     finalVCFout = parentDir + '/testing_bodies_pseudorefMapped_genotypes.vcf'
     
@@ -134,7 +134,7 @@ if __name__ == '__main__':
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
                           startPoint = 'barcodes')
-    '''
+    
     # COMPLETED FOR 65 SAMPLE TEST SET ON 6/23/2017 (10 MIN RUN TIME)
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
     #seq_type = 'pear' # even though these aren't pear-merged, this is still the proper argument -- it tells the fxn that the reads are merged/concatenated
@@ -195,16 +195,16 @@ if __name__ == '__main__':
                out_dir = BWAoutDir, 
                BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
                pseudoref_full_path = pseudorefOutDir)
-    
-    ''' DBR_Filter function needs revision before running.
+    '''
+    ## DBR_Filter function needs revision before running.
     ## NOT DONE ##
     # FILTER OUT PCR DUPLICATES USING THE DBR SEQUENCES
     DBR_Filter(assembled_dir = BWAoutDir, # the SAM files for the data mapped to pseudoreference
                out_dir = DBRfilteredseqs, # the output file, full path, ending with .fasta
                n_expected = 2, # the number of differences to be tolerated
-               barcode_dir = '/home/pierce/CSU_ChronicWasting/RevisedBarcodes', # the barcodes for individuals in the library referenced in dict_in
+               barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
                dict_dir = dbrOutDir, # a single dictionary of DBRs (for one library only)
-               sample_regex = '.*_(\d{1,3}T?)_.*',
+               sample_regex = '.*_(\w*\d*.R1)_.*',
                barcode_file=None, # if just a single library is being used, can directly pass the barcode file
                test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
                phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
@@ -224,4 +224,4 @@ if __name__ == '__main__':
              VCFout = finalVCFout,
              samtoolsPath = samtoolsPath,
              bcftoolsPath = bcftoolsPath)
-    '''
+
