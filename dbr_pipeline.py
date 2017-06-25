@@ -199,7 +199,7 @@ if __name__ == '__main__':
     ## DBR_Filter function needs revision before running.
     ## NOT DONE ##
     # FILTER OUT PCR DUPLICATES USING THE DBR SEQUENCES
-    DBR_Filter(assembled_dir = BWAoutDir, # the SAM files for the data mapped to pseudoreference
+    parallel_DBR_Filter(assembled_dir = BWAoutDir, # the SAM files for the data mapped to pseudoreference
                out_dir = DBRfilteredseqs, # the output file, full path, ending with .fasta
                n_expected = 2, # the number of differences to be tolerated
                barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
