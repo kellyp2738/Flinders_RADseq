@@ -93,7 +93,7 @@ if __name__ == '__main__':
     pseudorefOutDir = parentDir + '/Legs_Larvae_pseudoreference.fastq'
     
     BWAoutDir_Legs_Larvae = parentDir + '/BWA_Legs_Larvae/'
-    BWAoutDir_Bodies = parentDir + '/BWA_Bodies/
+    BWAoutDir_Bodies = parentDir + '/BWA_Bodies/'
     
     DBRfilteredseqs_Legs_Larvae = parentDir + '/dbrFiltered_Legs_Larvae/'
     DBRfilteredseqs_Bodies = parentDir + '/dbrFiltered_Bodies/'
