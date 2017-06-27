@@ -65,24 +65,38 @@ if __name__ == '__main__':
     #demultiplexInDir = mergeLanesOutDir
     #demultiplexOutDir = parentDir + '/demultiplexed/'
     
+    # bodies
     dbrInDir = '/mnt/HGST4TB/demultiplexed_testing_data'
+    dbrInDir_bodies = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Bodies' # b. hydro
+    dbrInDir_others = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Bodies_nonBH' # non b. hydro
+    
+    # legs
+    dbrInDir_legs = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Legs'
+    
+    # larvae
+    dbrInDir_larvae = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Larvae'
+    
     dbrOutDir = parentDir + '/DBR_dir_by_sample/'
-    # for debugging only:
-    #dbrInDir = '/mnt/HGST4TB/dbr_debug'
-    #dbrOutDir = parentDir + '/dbr_debug_output_dict/'
     
-    trimInDir = '/mnt/HGST4TB/demultiplexed_testing_data'
-    trimOutDir = parentDir + '/trimmed_testing_bodies/'
+    trimInDir_bodies = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Bodies'
+    trimInDir_others = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Bodies_nonBH'
+    trimInDir_legs = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Legs'
+    trimInDir_larvae = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Larvae'
     
-    stacksInDir = trimOutDir
-    stacksOutDir = parentDir + '/Stacks_testing_bodies_Output/' # stacks doesn't allow an output to be specified
+    trimOutDir_BWA = parentDir + '/trimmed_for_BWA' # bodies
+    trimOutDir_stacks = parentDir + '/trimmed_for_Stacks/' # legs & larvae
+    
+    stacksInDir = trimOutDir_stacks
+    stacksOutDir = parentDir + '/Stacks_Legs_Larvae_Output/' # stacks doesn't allow an output to be specified
     
     pseudorefInDir = stacksOutDir
-    pseudorefOutDir = parentDir + '/testing_bodies_pseudoreference.fastq'
+    pseudorefOutDir = parentDir + '/Legs_Larvae_pseudoreference.fastq'
     
-    BWAoutDir = parentDir + '/BWA_testing_bodies/'
+    BWAoutDir_Legs_Larvae = parentDir + '/BWA_Legs_Larvae/'
+    BWAoutDir_Bodies = parentDir + '/BWA_Bodies/
     
-    DBRfilteredseqs = parentDir + '/dbrFiltered/'
+    DBRfilteredseqs_Legs_Larvae = parentDir + '/dbrFiltered_Legs_Larvae/'
+    DBRfilteredseqs_Bodies = parentDir + '/dbrFiltered_Bodies/'
     
     #### PART 2: REASSEMBLING THE FILTERED SEQUENCES
     re_demultiplexInDir = DBRfilteredseqs
@@ -134,16 +148,37 @@ if __name__ == '__main__':
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
                           startPoint = 'barcodes')
-    
+    '''
     # COMPLETED FOR 65 SAMPLE TEST SET ON 6/23/2017 (10 MIN RUN TIME)
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
-    #seq_type = 'pear' # even though these aren't pear-merged, this is still the proper argument -- it tells the fxn that the reads are merged/concatenated
-    #parallel_DBR_dict(in_dir = dbrInDir, 
-    #                  seqType = seq_type, 
-    #                  dbr_start = -10, 
-    #                  dbr_stop = -2, 
-    #                  test_dict = True, 
-    #                  save = dbrOutDir)
+    seq_type = 'pear' # even though these aren't pear-merged, this is still the proper argument -- it tells the fxn that the reads are merged/concatenated
+    parallel_DBR_dict(in_dir = dbrInDir_bodies, 
+                      seqType = seq_type, 
+                      dbr_start = -10, 
+                      dbr_stop = -2, 
+                      test_dict = True, 
+                      save = dbrOutDir)
+                      
+    parallel_DBR_dict(in_dir = dbrInDir_others, 
+                      seqType = seq_type, 
+                      dbr_start = -10, 
+                      dbr_stop = -2, 
+                      test_dict = True, 
+                      save = dbrOutDir)
+                      
+    parallel_DBR_dict(in_dir = dbrInDir_legs, 
+                      seqType = seq_type, 
+                      dbr_start = -10, 
+                      dbr_stop = -2, 
+                      test_dict = True, 
+                      save = dbrOutDir)
+                      
+    parallel_DBR_dict(in_dir = dbrInDir_larvae, 
+                      seqType = seq_type, 
+                      dbr_start = -10, 
+                      dbr_stop = -2, 
+                      test_dict = True, 
+                      save = dbrOutDir)
                           
     ## DO NOT REDO THIS STEP FOR LEGS AND BODIES
     ## ONLY TRIM LARVAL SEQUENCES (NOT YET DONE)
@@ -152,13 +187,34 @@ if __name__ == '__main__':
     suffix = '_trimmed.fq'
     first_base = 1 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer
     last_base = 123 # this is the number of bases left after the longest barcode + other sequences are removed: 150bp read length - 9mer barcode (max) - 4mer R1 cut - 4mer R2 cut - 10mer DBR = 123
-    parallel_Trim(in_dir = trimInDir, 
-         out_dir = trimOutDir, 
+    parallel_Trim(in_dir = trimInDir_bodies, 
+         out_dir = trimOutDir_BWA, 
          trimPath = trimmer, 
          first_base = first_base, 
          last_base = last_base,
          suffix = suffix)
-
+         
+    parallel_Trim(in_dir = trimInDir_others, 
+         out_dir = trimOutDir_BWA, 
+         trimPath = trimmer, 
+         first_base = first_base, 
+         last_base = last_base,
+         suffix = suffix)
+         
+    parallel_Trim(in_dir = trimInDir_legs, 
+         out_dir = trimOutDir_stacks, 
+         trimPath = trimmer, 
+         first_base = first_base, 
+         last_base = last_base,
+         suffix = suffix)
+         
+    parallel_Trim(in_dir = trimInDir_larvae, 
+         out_dir = trimOutDir_stacks, 
+         trimPath = trimmer, 
+         first_base = first_base, 
+         last_base = last_base,
+         suffix = suffix)
+         
     # COMPLETED 10/25/2016, BUT PROGRAM DIDN'T EXIT OR PROCEED TO denovo_Cstacs()
     # I think the function needs a return?
     # RUN USTACKS SIMULTANEOUSLY ON ALL LIBRARIES
@@ -191,25 +247,40 @@ if __name__ == '__main__':
                       
     # COMPLETED 10/26/2016
     # REFERENCE MAP QUALITY FILTERED/DEMULTIPLEXED MERGED READS TO THE PSEUDOREFERENCE
-    parallel_refmap_BWA(in_dir = trimOutDir, # input demultiplexed, trimmed reads
-               out_dir = BWAoutDir, 
+    parallel_refmap_BWA(in_dir = trimOutDir_BWA, # input demultiplexed, trimmed reads
+               out_dir = BWAoutDir_Bodies, 
                BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
                pseudoref_full_path = pseudorefOutDir)
-    '''
-    ## DBR_Filter function needs revision before running.
-    ## NOT DONE ##
+               
+    parallel_refmap_BWA(in_dir = trimOutDir_stacks, # input demultiplexed, trimmed reads
+               out_dir = BWAoutDir_Legs_Larvae, 
+               BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
+               pseudoref_full_path = pseudorefOutDir)
+               
     # FILTER OUT PCR DUPLICATES USING THE DBR SEQUENCES
-    parallel_DBR_Filter(assembled_dir = BWAoutDir, # the SAM files for the data mapped to pseudoreference
-               out_dir = DBRfilteredseqs, # the output file, full path, ending with .fasta
+    parallel_DBR_Filter(assembled_dir = BWAoutDir_Bodies, # the SAM files for the data mapped to pseudoreference
+               out_dir = DBRfilteredseqs_Bodies, # the output file, full path, ending with .fasta
                n_expected = 2, # the number of differences to be tolerated
                barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
                dict_dir = dbrOutDir, # a single dictionary of DBRs (for one library only)
                sample_regex = r'(.*_psti.R1)',
+               sam_list = sample_sam_file_list
+               test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
+               phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
+               samMapLen=None)
+               
+    parallel_DBR_Filter(assembled_dir = BWAoutDir_Legs_Larvae, # the SAM files for the data mapped to pseudoreference
+               out_dir = DBRfilteredseqs_Legs_Larvae, # the output file, full path, ending with .fasta
+               n_expected = 2, # the number of differences to be tolerated
+               barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
+               dict_dir = dbrOutDir, # a single dictionary of DBRs (for one library only)
+               sample_regex = r'(.*_psti.R1)',
+               sam_list = sample_sam_file_list
                test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
                phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
                samMapLen=None)
     
-    # COMPLETED 10/26/2016 -- ****UNFILTERED READS****
+    # COMPLETED 10/26/2016 
     # REFERENCE MAP DBR FILTERED READS TO THE PSEUDOREFERENCE
     #parallel_refmap_BWA(in_dir = re_BWAinDir, # input demultiplexed, trimmed reads
     #           out_dir = re_BWAoutDir, 
