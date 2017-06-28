@@ -76,7 +76,9 @@ if __name__ == '__main__':
     # larvae
     dbrInDir_larvae = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Larvae'
     
-    dbrOutDir = parentDir + '/DBR_dir_by_sample/'
+    # since samples will be duplicated in the bodies/legs groups and file name won't specify the tissue type, we need different directories for tissue type to ensure the right DBR dict is referenced
+    dbrOutDir_legs_larvae = parentDir + '/DBR_dirs_legs_larvae/'
+    dbrOutDir_bodies = parentDir + '/DBR_dirs_bodies/'
     
     trimInDir_bodies = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Bodies'
     trimInDir_others = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Bodies_nonBH'
@@ -158,7 +160,7 @@ if __name__ == '__main__':
                       dbr_stop = None, 
                       threads = threads,
                       test_dict = True, 
-                      save = dbrOutDir)
+                      save = dbrOutDir_bodies)
                       
     parallel_DBR_dict(in_dir = dbrInDir_others, 
                       seqType = seq_type, 
@@ -166,7 +168,7 @@ if __name__ == '__main__':
                       dbr_stop = None, 
                       threads = threads,
                       test_dict = True, 
-                      save = dbrOutDir)
+                      save = dbrOutDir_bodies)
                       
     parallel_DBR_dict(in_dir = dbrInDir_legs, 
                       seqType = seq_type, 
@@ -174,7 +176,7 @@ if __name__ == '__main__':
                       dbr_stop = None, 
                       threads = threads,
                       test_dict = True, 
-                      save = dbrOutDir)
+                      save = dbrOutDir_legs_larvae)
                       
     parallel_DBR_dict(in_dir = dbrInDir_larvae, 
                       seqType = seq_type, 
@@ -182,7 +184,7 @@ if __name__ == '__main__':
                       dbr_stop = None, 
                       threads = threads,
                       test_dict = True, 
-                      save = dbrOutDir)
+                      save = dbrOutDir_legs_larvae)
                           
     ## DO NOT REDO THIS STEP FOR LEGS AND BODIES
     ## ONLY TRIM LARVAL SEQUENCES (NOT YET DONE)
@@ -274,7 +276,7 @@ if __name__ == '__main__':
                out_dir = DBRfilteredseqs_Bodies, # the output file, full path, ending with .fasta
                n_expected = 2, # the number of differences to be tolerated
                barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
-               dict_dir = dbrOutDir, # a single dictionary of DBRs (for one library only)
+               dict_dir = dbrOutDir_bodies, # a single dictionary of DBRs (for one library only)
                sample_regex = r'(.*_psti.R1)',
                sam_list = sample_sam_file_list,
                test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
@@ -285,7 +287,7 @@ if __name__ == '__main__':
                out_dir = DBRfilteredseqs_Legs_Larvae, # the output file, full path, ending with .fasta
                n_expected = 2, # the number of differences to be tolerated
                barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
-               dict_dir = dbrOutDir, # a single dictionary of DBRs (for one library only)
+               dict_dir = dbrOutDir_legs_larvae, # a single dictionary of DBRs (for one library only)
                sample_regex = r'(.*_psti.R1)',
                sam_list = sample_sam_file_list,
                test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
