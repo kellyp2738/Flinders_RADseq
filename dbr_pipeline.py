@@ -155,28 +155,32 @@ if __name__ == '__main__':
     parallel_DBR_dict(in_dir = dbrInDir_bodies, 
                       seqType = seq_type, 
                       dbr_start = -10, 
-                      dbr_stop = -2, 
+                      dbr_stop = None, 
+                      threads = threads,
                       test_dict = True, 
                       save = dbrOutDir)
                       
     parallel_DBR_dict(in_dir = dbrInDir_others, 
                       seqType = seq_type, 
                       dbr_start = -10, 
-                      dbr_stop = -2, 
+                      dbr_stop = None, 
+                      threads = threads,
                       test_dict = True, 
                       save = dbrOutDir)
                       
     parallel_DBR_dict(in_dir = dbrInDir_legs, 
                       seqType = seq_type, 
                       dbr_start = -10, 
-                      dbr_stop = -2, 
+                      dbr_stop = None, 
+                      threads = threads,
                       test_dict = True, 
                       save = dbrOutDir)
                       
     parallel_DBR_dict(in_dir = dbrInDir_larvae, 
                       seqType = seq_type, 
                       dbr_start = -10, 
-                      dbr_stop = -2, 
+                      dbr_stop = None, 
+                      threads = threads,
                       test_dict = True, 
                       save = dbrOutDir)
                           
@@ -185,11 +189,14 @@ if __name__ == '__main__':
     # COMPLETED IN THE WEE HOURS OF 10/25/2016
     # TRIM TO UNIFORM LENGTH
     suffix = '_trimmed.fq'
-    first_base = 1 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer
-    last_base = 123 # this is the number of bases left after the longest barcode + other sequences are removed: 150bp read length - 9mer barcode (max) - 4mer R1 cut - 4mer R2 cut - 10mer DBR = 123
+    first_base = 1 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer; start at 1 for fastx trimmer
+    # this is the number of bases left after the longest barcode + other sequences are removed: 
+    #		150bp read length - 9mer barcode (max) - 4mer R1 cut - 4mer R2 cut - 10mer DBR = 123
+    last_base = 123 
     parallel_Trim(in_dir = trimInDir_bodies, 
          out_dir = trimOutDir_BWA, 
          trimPath = trimmer, 
+         threads = threads,
          first_base = first_base, 
          last_base = last_base,
          suffix = suffix)
@@ -197,6 +204,7 @@ if __name__ == '__main__':
     parallel_Trim(in_dir = trimInDir_others, 
          out_dir = trimOutDir_BWA, 
          trimPath = trimmer, 
+         threads = threads,
          first_base = first_base, 
          last_base = last_base,
          suffix = suffix)
@@ -204,6 +212,7 @@ if __name__ == '__main__':
     parallel_Trim(in_dir = trimInDir_legs, 
          out_dir = trimOutDir_stacks, 
          trimPath = trimmer, 
+         threads = threads,
          first_base = first_base, 
          last_base = last_base,
          suffix = suffix)
@@ -211,6 +220,7 @@ if __name__ == '__main__':
     parallel_Trim(in_dir = trimInDir_larvae, 
          out_dir = trimOutDir_stacks, 
          trimPath = trimmer, 
+         threads = threads,
          first_base = first_base, 
          last_base = last_base,
          suffix = suffix)
