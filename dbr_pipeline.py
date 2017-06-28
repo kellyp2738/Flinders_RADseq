@@ -99,12 +99,12 @@ if __name__ == '__main__':
     DBRfilteredseqs_Bodies = parentDir + '/dbrFiltered_Bodies/'
     
     #### PART 2: REASSEMBLING THE FILTERED SEQUENCES
-    re_demultiplexInDir = DBRfilteredseqs
-    re_demultiplexOutDir = parentDir + '/dbrFiltered_demultiplexed/'
-    re_BWAinDir = DBRfilteredseqs
-    re_BWAoutDir = parentDir + '/dbrFiltered_BWA2/'
-    finalBCFout = parentDir + '/testing_bodies_pseudorefMapped_genotypes.bcf'
-    finalVCFout = parentDir + '/testing_bodies_pseudorefMapped_genotypes.vcf'
+    #re_demultiplexInDir = DBRfilteredseqs
+    #re_demultiplexOutDir = parentDir + '/dbrFiltered_demultiplexed/'
+    #re_BWAinDir = DBRfilteredseqs
+    #re_BWAoutDir = parentDir + '/dbrFiltered_BWA2/'
+    #finalBCFout = parentDir + '/testing_bodies_pseudorefMapped_genotypes.bcf'
+    #finalVCFout = parentDir + '/testing_bodies_pseudorefMapped_genotypes.vcf'
     
     #########################################################################
     ### FUNCTION CALLS TO RUN THE PIPELINE                                ###
