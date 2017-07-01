@@ -150,7 +150,7 @@ if __name__ == '__main__':
                           regexLibrary = 'IDX\d{1}',
                           demultiplexPath = demultiplexPath,
                           startPoint = 'barcodes')
-    '''
+    
     # COMPLETED FOR 65 SAMPLE TEST SET ON 6/23/2017 (10 MIN RUN TIME)
     # MAKE DBR DICTIONARIES FOR QUAL FILTERED PEAR DATA
     seq_type = 'pear' # even though these aren't pear-merged, this is still the proper argument -- it tells the fxn that the reads are merged/concatenated
@@ -185,7 +185,7 @@ if __name__ == '__main__':
                       threads = threads,
                       test_dict = True, 
                       save = dbrOutDir_legs_larvae)
-                          
+    '''                      
     ## DO NOT REDO THIS STEP FOR LEGS AND BODIES
     ## ONLY TRIM LARVAL SEQUENCES (NOT YET DONE)
     # COMPLETED IN THE WEE HOURS OF 10/25/2016
@@ -195,21 +195,21 @@ if __name__ == '__main__':
     # this is the number of bases left after the longest barcode + other sequences are removed: 
     #		150bp read length - 9mer barcode (max) - 4mer R1 cut - 4mer R2 cut - 10mer DBR = 123
     last_base = 123 
-    parallel_Trim(in_dir = trimInDir_bodies, 
-         out_dir = trimOutDir_BWA, 
-         trimPath = trimmer, 
-         threads = threads,
-         first_base = first_base, 
-         last_base = last_base,
-         suffix = suffix)
+    #parallel_Trim(in_dir = trimInDir_bodies, 
+    #     out_dir = trimOutDir_BWA, 
+    #     trimPath = trimmer, 
+    #     threads = threads,
+    #     first_base = first_base, 
+    #     last_base = last_base,
+    #     suffix = suffix)
          
-    parallel_Trim(in_dir = trimInDir_others, 
-         out_dir = trimOutDir_BWA, 
-         trimPath = trimmer, 
-         threads = threads,
-         first_base = first_base, 
-         last_base = last_base,
-         suffix = suffix)
+    #parallel_Trim(in_dir = trimInDir_others, 
+    #     out_dir = trimOutDir_BWA, 
+    #     trimPath = trimmer, 
+    #     threads = threads,
+    #     first_base = first_base, 
+    #     last_base = last_base,
+    #     suffix = suffix)
          
     parallel_Trim(in_dir = trimInDir_legs, 
          out_dir = trimOutDir_stacks, 
