@@ -236,7 +236,7 @@ if __name__ == '__main__':
                   out_dir = stacksOutDir, 
                   m = 10, 
                   n = 2, 
-                  p = threads,
+                  num_threads = threads, # -p
                   b = 1, 
                   D = '_initial_assembly',
                   unmatchedName = 'undetermined')
@@ -249,7 +249,7 @@ if __name__ == '__main__':
                   out_dir = stacksOutDir, 
                   m = 10, 
                   n = 2,
-                  p = threads, 
+                  num_threads = threads, # -p
                   b = 1, 
                   D = '_initial_assembly')
                   
