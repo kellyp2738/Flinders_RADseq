@@ -211,21 +211,21 @@ if __name__ == '__main__':
     #     last_base = last_base,
     #     suffix = suffix)
          
-    parallel_Trim(in_dir = trimInDir_legs, 
-         out_dir = trimOutDir_stacks, 
-         trimPath = trimmer, 
-         threads = threads,
-         first_base = first_base, 
-         last_base = last_base,
-         suffix = suffix)
+    #parallel_Trim(in_dir = trimInDir_legs, 
+    #     out_dir = trimOutDir_stacks, 
+    #     trimPath = trimmer, 
+    #     threads = threads,
+    #     first_base = first_base, 
+    #     last_base = last_base,
+    #     suffix = suffix)
          
-    parallel_Trim(in_dir = trimInDir_larvae, 
-         out_dir = trimOutDir_stacks, 
-         trimPath = trimmer, 
-         threads = threads,
-         first_base = first_base, 
-         last_base = last_base,
-         suffix = suffix)
+    #parallel_Trim(in_dir = trimInDir_larvae, 
+    #     out_dir = trimOutDir_stacks, 
+    #     trimPath = trimmer, 
+    #     threads = threads,
+    #     first_base = first_base, 
+    #     last_base = last_base,
+    #     suffix = suffix)
          
     # COMPLETED 10/25/2016, BUT PROGRAM DIDN'T EXIT OR PROCEED TO denovo_Cstacs()
     # I think the function needs a return?
@@ -236,7 +236,6 @@ if __name__ == '__main__':
                   out_dir = stacksOutDir, 
                   m = 10, 
                   n = 2, 
-                  p = threads,
                   b = 1, 
                   D = '_initial_assembly',
                   unmatchedName = 'undetermined')
