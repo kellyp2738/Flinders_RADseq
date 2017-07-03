@@ -33,14 +33,14 @@ if __name__ == '__main__':
     #########################################################################
     
     #pearPath = 'pear-0.9.6-bin-64'
-	qualityFilter = 'fastq_quality_filter'
-	trimmer = 'fastx_trimmer'
-	demultiplexPath = 'fastx_barcode_splitter.pl'
-	denovo_path = 'denovo_map.pl'
-	stacks_executables = '/usr/lib/stacks/bin' # this is where ustacks and cstacks live, which should be all we need. other stacks scripts are in /opt/software/stacks-1.26/scripts
-	BWA = 'bwa'
-	samtoolsPath = 'samtools'
-	bcftoolsPath = 'bcftools'
+    qualityFilter = 'fastq_quality_filter'
+    trimmer = 'fastx_trimmer'
+    demultiplexPath = 'fastx_barcode_splitter.pl'
+    denovo_path = 'denovo_map.pl'
+    stacks_executables = '/usr/lib/stacks-1.42/bin' # this is where ustacks and cstacks live, which should be all we need. other stacks scripts are in /opt/software/stacks-1.26/scripts
+    BWA = 'bwa'
+    samtoolsPath = 'samtools'
+    bcftoolsPath = 'bcftools'
     
     #########################################################################
     ### INPUTS AND OUTPUTS                                                ###
@@ -193,7 +193,7 @@ if __name__ == '__main__':
     suffix = '_trimmed.fq'
     first_base = 1 # barcodes and enzyme cut sites already trimmed using GBSX demultiplexer; start at 1 for fastx trimmer
     # this is the number of bases left after the longest barcode + other sequences are removed: 
-    #		150bp read length - 9mer barcode (max) - 4mer R1 cut - 4mer R2 cut - 10mer DBR = 123
+    #       150bp read length - 9mer barcode (max) - 4mer R1 cut - 4mer R2 cut - 10mer DBR = 123
     last_base = 123 
     #parallel_Trim(in_dir = trimInDir_bodies, 
     #     out_dir = trimOutDir_BWA, 
