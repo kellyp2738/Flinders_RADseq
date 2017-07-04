@@ -85,7 +85,7 @@ if __name__ == '__main__':
     trimInDir_legs = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Legs'
     trimInDir_larvae = '/mnt/HGST4TB/demultiplexed_gsbx/demultiplexed_Larvae'
     
-    trimOutDir_BWA = parentDir + '/trimmed_for_BWA' # bodies
+    trimOutDir_BWA = parentDir + '/trimmed_for_BWA/' # bodies
     trimOutDir_stacks = parentDir + '/trimmed_for_Stacks/' # legs & larvae
     
     stacksInDir = trimOutDir_stacks
