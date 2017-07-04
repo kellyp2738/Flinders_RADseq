@@ -227,49 +227,42 @@ if __name__ == '__main__':
     #     last_base = last_base,
     #     suffix = suffix)
          
-    # COMPLETED 10/25/2016, BUT PROGRAM DIDN'T EXIT OR PROCEED TO denovo_Cstacs()
-    # I think the function needs a return?
-    # RUN USTACKS SIMULTANEOUSLY ON ALL LIBRARIES
-    denovo_Ustacks(in_dir = stacksInDir, 
-                  denovo_path = denovo_path, 
-                  stacks_executables = stacks_executables, 
-                  out_dir = stacksOutDir, 
-                  m = 10, 
-                  n = 2, 
-                  num_threads = threads, # -p
-                  b = 1, 
-                  D = '_initial_assembly',
-                  unmatchedName = 'undetermined')
+    #denovo_Ustacks(in_dir = stacksInDir, 
+    #              denovo_path = denovo_path, 
+    #              stacks_executables = stacks_executables, 
+    #              out_dir = stacksOutDir, 
+    #              m = 10, 
+    #              n = 2, 
+    #              num_threads = threads, # -p
+    #              b = 1, 
+    #              D = '_initial_assembly',
+    #              unmatchedName = 'undetermined')
 
-    # COMPLETED 10/26/2016
-    # RUN CSTACKS SIMULTANEOUSLY ON ALL LIBRARIES (same args as above)
-    denovo_Cstacks(in_dir = stacksInDir, 
-                  denovo_path = denovo_path, 
-                  stacks_executables = stacks_executables, 
-                  out_dir = stacksOutDir, 
-                  m = 10, 
-                  n = 2,
-                  num_threads = threads, # -p
-                  b = 1, 
-                  D = '_initial_assembly')
+    #denovo_Cstacks(in_dir = stacksInDir, 
+    #              denovo_path = denovo_path, 
+    #              stacks_executables = stacks_executables, 
+    #              out_dir = stacksOutDir, 
+    #              m = 10, 
+    #              n = 2,
+    #              num_threads = threads, # -p
+    #              b = 1, 
+    #              D = '_initial_assembly')
                   
-    # COMPLETED 10/26/2016          
     # GENERATE THE PSEUDOREFERENCE GENOME
-    GeneratePseudoref(in_dir = pseudorefInDir, 
-                      out_file = pseudorefOutDir,  
-                      BWA_path = BWA) # imported from integrated_denovo_pipeline.py
+    #GeneratePseudoref(in_dir = pseudorefInDir, 
+    #                  out_file = pseudorefOutDir,  
+    #                  BWA_path = BWA) # imported from integrated_denovo_pipeline.py
                       
-    # COMPLETED 10/26/2016
     # REFERENCE MAP QUALITY FILTERED/DEMULTIPLEXED MERGED READS TO THE PSEUDOREFERENCE
-    parallel_refmap_BWA(in_dir = trimOutDir_BWA, # input demultiplexed, trimmed reads
-               out_dir = BWAoutDir_Bodies, 
-               BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
-               pseudoref_full_path = pseudorefOutDir)
+    #parallel_refmap_BWA(in_dir = trimOutDir_BWA, # input demultiplexed, trimmed reads
+    #           out_dir = BWAoutDir_Bodies, 
+    #           BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
+    #           pseudoref_full_path = pseudorefOutDir)
                
-    parallel_refmap_BWA(in_dir = trimOutDir_stacks, # input demultiplexed, trimmed reads
-               out_dir = BWAoutDir_Legs_Larvae, 
-               BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
-               pseudoref_full_path = pseudorefOutDir)
+    #parallel_refmap_BWA(in_dir = trimOutDir_stacks, # input demultiplexed, trimmed reads
+    #           out_dir = BWAoutDir_Legs_Larvae, 
+    #           BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
+    #           pseudoref_full_path = pseudorefOutDir)
                
     # FILTER OUT PCR DUPLICATES USING THE DBR SEQUENCES
     parallel_DBR_Filter(assembled_dir = BWAoutDir_Bodies, # the SAM files for the data mapped to pseudoreference
