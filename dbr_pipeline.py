@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -O
 
 #########################################################################
 ### De novo pipeline for processing complete Adelaide tick dataset    ###
@@ -278,7 +278,8 @@ if __name__ == '__main__':
                barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
                dict_dir = dbrOutDir_bodies, # a single dictionary of DBRs (for one library only)
                sample_regex = r'(.*_psti.R1)',
-               sam_list = sample_sam_file_list,
+               num_threads = threads,
+               sam_list = None, # get the list of samples from the file names in assembled_dir
                test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
                phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
                samMapLen=None)
@@ -289,7 +290,8 @@ if __name__ == '__main__':
                barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
                dict_dir = dbrOutDir_legs_larvae, # a single dictionary of DBRs (for one library only)
                sample_regex = r'(.*_psti.R1)',
-               sam_list = sample_sam_file_list,
+               num_threads = threads,
+               sam_list =  None, # get the list of samples from the file names in assembled_dir
                test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
                phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
                samMapLen=None)
