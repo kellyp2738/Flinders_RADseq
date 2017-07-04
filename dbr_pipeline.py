@@ -254,10 +254,10 @@ if __name__ == '__main__':
     #                  BWA_path = BWA) # imported from integrated_denovo_pipeline.py
                       
     # REFERENCE MAP QUALITY FILTERED/DEMULTIPLEXED MERGED READS TO THE PSEUDOREFERENCE
-    #parallel_refmap_BWA(in_dir = trimOutDir_BWA, # input demultiplexed, trimmed reads
-    #           out_dir = BWAoutDir_Bodies, 
-    #           BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
-    #           pseudoref_full_path = pseudorefOutDir)
+    parallel_refmap_BWA(in_dir = trimOutDir_BWA, # input demultiplexed, trimmed reads
+               out_dir = BWAoutDir_Bodies, 
+               BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
+               pseudoref_full_path = pseudorefOutDir)
                
     #parallel_refmap_BWA(in_dir = trimOutDir_stacks, # input demultiplexed, trimmed reads
     #           out_dir = BWAoutDir_Legs_Larvae, 
