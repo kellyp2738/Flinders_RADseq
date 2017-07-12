@@ -101,12 +101,9 @@ if __name__ == '__main__':
     DBRfilteredseqs_Bodies = parentDir + '/dbrFiltered_Bodies/'
     
     #### PART 2: REASSEMBLING THE FILTERED SEQUENCES
-    #re_demultiplexInDir = DBRfilteredseqs
-    #re_demultiplexOutDir = parentDir + '/dbrFiltered_demultiplexed/'
-    #re_BWAinDir = DBRfilteredseqs
-    #re_BWAoutDir = parentDir + '/dbrFiltered_BWA2/'
-    #finalBCFout = parentDir + '/testing_bodies_pseudorefMapped_genotypes.bcf'
-    #finalVCFout = parentDir + '/testing_bodies_pseudorefMapped_genotypes.vcf'
+    final_BWAoutDir = parentDir + '/dbr_filtered_all_samples_mapped_to_legs_larvae_pseudoref/'
+    finalBCFout = parentDir + '/dbr_filtered_all_samples_mapped_to_legs_larvae_pseudoref_genotypes.bcf'
+    finalVCFout = parentDir + '/dbr_filtered_all_samples_mapped_to_legs_larvae_pseudoref_genotypes.vcf'
     
     #########################################################################
     ### FUNCTION CALLS TO RUN THE PIPELINE                                ###
@@ -265,42 +262,47 @@ if __name__ == '__main__':
     #           pseudoref_full_path = pseudorefOutDir)
                
     # FILTER OUT PCR DUPLICATES USING THE DBR SEQUENCES
-    parallel_DBR_Filter(assembled_dir = BWAoutDir_Bodies, # the SAM files for the data mapped to pseudoreference
-               out_dir = DBRfilteredseqs_Bodies, # the output file, full path, ending with .fasta
-               n_expected = 2, # the number of differences to be tolerated
-               barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
-               dict_dir = dbrOutDir_bodies, # a single dictionary of DBRs (for one library only)
-               sample_regex = r'(.*_psti.R1)',
-               num_threads = threads,
-               sam_list = None, # get the list of samples from the file names in assembled_dir
-               test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
-               phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
-               samMapLen=None)
+    #parallel_DBR_Filter(assembled_dir = BWAoutDir_Bodies, # the SAM files for the data mapped to pseudoreference
+    #           out_dir = DBRfilteredseqs_Bodies, # the output file, full path, ending with .fasta
+    #           n_expected = 2, # the number of differences to be tolerated
+    #           barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
+    #           dict_dir = dbrOutDir_bodies, # a single dictionary of DBRs (for one library only)
+    #           sample_regex = r'(.*_psti.R1)',
+    #           num_threads = threads,
+    #           sam_list = None, # get the list of samples from the file names in assembled_dir
+    #           test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
+    #           phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
+    #           samMapLen=None)
                
-    parallel_DBR_Filter(assembled_dir = BWAoutDir_Legs_Larvae, # the SAM files for the data mapped to pseudoreference
-               out_dir = DBRfilteredseqs_Legs_Larvae, # the output file, full path, ending with .fasta
-               n_expected = 2, # the number of differences to be tolerated
-               barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
-               dict_dir = dbrOutDir_legs_larvae, # a single dictionary of DBRs (for one library only)
-               sample_regex = r'(.*_psti.R1)',
-               num_threads = threads,
-               sam_list =  None, # get the list of samples from the file names in assembled_dir
-               test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
-               phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
-               samMapLen=None)
+    #parallel_DBR_Filter(assembled_dir = BWAoutDir_Legs_Larvae, # the SAM files for the data mapped to pseudoreference
+    #           out_dir = DBRfilteredseqs_Legs_Larvae, # the output file, full path, ending with .fasta
+    #           n_expected = 2, # the number of differences to be tolerated
+    #           barcode_dir = None, # the barcodes for individuals in the library referenced in dict_in
+    #           dict_dir = dbrOutDir_legs_larvae, # a single dictionary of DBRs (for one library only)
+    #           sample_regex = r'(.*_psti.R1)',
+    #           num_threads = threads,
+    #           sam_list =  None, # get the list of samples from the file names in assembled_dir
+    #           test_dict=True, # optionally print testing info to stdout for checking the dictionary construction
+    #           phred_dict=phred_dict, # dictionary containing ASCII quality filter scores to help with tie breaks
+    #           samMapLen=None)
     
-    # COMPLETED 10/26/2016 
     # REFERENCE MAP DBR FILTERED READS TO THE PSEUDOREFERENCE
-    #parallel_refmap_BWA(in_dir = re_BWAinDir, # input demultiplexed, trimmed reads
-    #           out_dir = re_BWAoutDir, 
-    #           BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
-    #           pseudoref_full_path = pseudorefOutDir)
+    parallel_refmap_BWA(in_dir = DBRfilteredseqs_Bodies, # input demultiplexed, trimmed reads
+               out_dir = final_BWAoutDir, 
+               BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
+               pseudoref_full_path = pseudorefOutDir,
+               extra_output_identifier='_bodies')
+               
+    parallel_refmap_BWA(in_dir = DBRfilteredseqs_Legs_Larvae, # input demultiplexed, trimmed reads
+               out_dir = final_BWAoutDir, 
+               BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
+               pseudoref_full_path = pseudorefOutDir,
+               extra_output_identifier='_legs_larvae')
                
     # CALL THE GENOTYPES USING SAMTOOLS MPILEUP; CONVERT OUTPUT TO VCF FILE
-    #callGeno(sam_in = BWAoutDir, 
-    #         pseudoref = pseudorefOutDir, 
-    #         BCFout = finalBCFout, 
-    #         VCFout = finalVCFout,
-    #         samtoolsPath = samtoolsPath,
-    #         bcftoolsPath = bcftoolsPath)
-
+    callGeno(sam_in = BWAoutDir, 
+             pseudoref = pseudorefOutDir, 
+             BCFout = finalBCFout, 
+             VCFout = finalVCFout,
+             samtoolsPath = samtoolsPath,
+             bcftoolsPath = bcftoolsPath)
