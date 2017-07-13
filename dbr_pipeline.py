@@ -287,20 +287,20 @@ if __name__ == '__main__':
     #           samMapLen=None)
     
     # REFERENCE MAP DBR FILTERED READS TO THE PSEUDOREFERENCE
-    parallel_refmap_BWA(in_dir = DBRfilteredseqs_Bodies, # input demultiplexed, trimmed reads
-               out_dir = final_BWAoutDir, 
-               BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
-               pseudoref_full_path = pseudorefOutDir,
-               extra_output_identifier='_bodies')
-               
-    parallel_refmap_BWA(in_dir = DBRfilteredseqs_Legs_Larvae, # input demultiplexed, trimmed reads
-               out_dir = final_BWAoutDir, 
-               BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
-               pseudoref_full_path = pseudorefOutDir,
-               extra_output_identifier='_legs_larvae')
+    #parallel_refmap_BWA(in_dir = DBRfilteredseqs_Bodies, # input demultiplexed, trimmed reads
+    #           out_dir = final_BWAoutDir, 
+    #           BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
+    #           pseudoref_full_path = pseudorefOutDir,
+    #           extra_output_identifier='_bodies')
+    #           
+    #parallel_refmap_BWA(in_dir = DBRfilteredseqs_Legs_Larvae, # input demultiplexed, trimmed reads
+    #           out_dir = final_BWAoutDir, 
+    #           BWA_path = BWA, # imported from integrated_denovo_pipeline.py 
+    #           pseudoref_full_path = pseudorefOutDir,
+    #           extra_output_identifier='_legs_larvae')
                
     # CALL THE GENOTYPES USING SAMTOOLS MPILEUP; CONVERT OUTPUT TO VCF FILE
-    callGeno(sam_in = BWAoutDir, 
+    callGeno(sam_in = final_BWAoutDir, 
              pseudoref = pseudorefOutDir, 
              BCFout = finalBCFout, 
              VCFout = finalVCFout,
