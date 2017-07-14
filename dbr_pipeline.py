@@ -300,7 +300,15 @@ if __name__ == '__main__':
     #           extra_output_identifier='_legs_larvae')
                
     # CALL THE GENOTYPES USING SAMTOOLS MPILEUP; CONVERT OUTPUT TO VCF FILE
-    callGeno(sam_in = final_BWAoutDir, 
+    ## callGeno function deprecated; replaced with samtools_view_sort_index() and samtools_mpileup() (same arguments)
+    #callGeno(sam_in = final_BWAoutDir, 
+    #         pseudoref = pseudorefOutDir, 
+    #         BCFout = finalBCFout, 
+    #         VCFout = finalVCFout,
+    #         samtoolsPath = samtoolsPath,
+    #         bcftoolsPath = bcftoolsPath)
+             
+    samtools_mpileup(sam_in = final_BWAoutDir, 
              pseudoref = pseudorefOutDir, 
              BCFout = finalBCFout, 
              VCFout = finalVCFout,
