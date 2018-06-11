@@ -1,0 +1,404 @@
+---
+title: "AdelaideTicks"
+author: "Kelly Pierce"
+date: "November 13, 2016"
+output: html_document
+---
+
+#Preprocessing
+
+Command lines for processing the genotype data:
+
+*Representative filtering commands* (not inclusive of all commands executed)
+
+`kpierce@joe-kaveri:/mnt/HGST4TB$ vcftools --vcf Legs_pseudorefMapped_genotypes.vcf --min-meanDP 10 --minGQ 25 --maf 0.05 --max-missing 0.75 --recode --out Legs_Bodies_pseudorefMapped_genotypes_minDP10_minGQ25_maf05_missing75`
+
+`kpierce@joe-kaveri:/mnt/HGST4TB$ sed '/^##/ d' Legs_Bodies_pseudorefMapped_genotypes_minDP10_minGQ25_maf05_missing75.recode.vcf | awk '!array[$1]++' > Legs_Bodies_pseudorefMapped_genotypes_minDP10_minGQ25_maf05_missing75_firstSNP.vcf`
+
+*Get the 012 file*
+`kpierce@joe-kaveri:/mnt/HGST4TB$ vcftools --vcf Legs_Bodies_pseudorefMapped_genotypes_minDP10_minGQ25_maf05_missing75_firstSNP.vcf --012 --out Legs_Bodies_pseudorefMapped_genotypes_minDP10_minGQ25_maf05_missing75_firstSNP_012`
+
+*Convert the 012 file for input into adegenet*
+`kellys-mbp-2:Flinders_RADseq Kelly$ python ~/Desktop/CSU_ChronicWasting/Scripts/VCF_to_Adegenet.py -o Legs_Bodies_pseudorefMapped_genotypes_minDP10_minGQ25_maf05_missing75_firstSNP_012.012 -n 352 -a Legs_Bodies_pseudorefMapped_genotypes_minDP10_minGQ25_maf05_missing75_firstSNP_012.adegenet.snp`
+
+#Adegenet analysis
+
+```{r dataImportExplore}
+require(adegenet)
+setwd('~/Desktop/Flinders_RADseq/')
+tick<-read.snp('Legs_Bodies_pseudorefMapped_genotypes_minDP10_minGQ25_maf05_missing75_firstSNP_012.adegenet.snp')
+
+# data exploration
+class(tick)
+names(tick)
+print(object.size(tick$gen), unit='Mb')
+class(tick$gen)
+class(tick$other)
+length(tick$other)
+
+# to look at the actual genotypes in a single snpbin object:
+head(as.integer(tick@gen[[1]]))
+
+glPlot(tick)
+hist(glMean(tick))
+```
+
+##PCA
+
+```{r PCA.1}
+# first pass
+pca1 <- glPca(tick)
+dim(pca1$scores)
+scatter(pca1)
+plot(pca1$scores[,1], pca1$scores[,2])
+```
+
+Do clusters correspond to any aspects of study design?
+
+```{r PCA.2}
+# get library & tissue info
+metaData <- read.table('~/Desktop/Flinders_RADseq/barcodes_tissues_libraries.txt')
+names(metaData) <- c('ID', 'barcode', 'enzyme', 'tissue', 'libName')
+# reconstruct the file name that will be found in the adegenet objects
+# this includes Is in the place of some 1s due to an earlier error
+metaData$reconstructedID <- paste('/mnt/HGST4TB//BWA_Legs_and_Bodies//', paste(metaData$ID, metaData$barcode, 'psti.R1.fastq_trimmed.sorted.bam', sep='_'), sep='')
+# now fix the I vs 1 issue
+metaData$fixedID <- gsub('I', '1', metaData$ID)
+
+
+lib <- c()
+tissue <- c()
+
+for(t in 1:length(row.names(pca1$scores))){
+  m <- metaData[which(as.character(metaData$reconstructedID) == as.character(row.names(pca1$scores)[t])),]
+  #print(m)
+  lib <- c(lib, as.character(m$libName))
+  tissue <- c(tissue, as.character(m$tissue))
+}
+
+library.colors <- c('#f7fcfd','#e0ecf4','#bfd3e6','#9ebcda','#8c96c6','#8c6bb1','#88419d','#6e016b')
+tissue.colors <- c('#fe9929','#8c2d04')
+plot(pca1$scores[,1], pca1$scores[,2], col = library.colors[as.factor(lib)], pch=16)
+plot(pca1$scores[,1], pca1$scores[,2], col = tissue.colors[as.factor(tissue)], pch=16)
+
+# no clear correspondance to tissue or library
+```
+
+```{r findClusters}
+tick.c <- find.clusters(tick)
+tick.dapc <- dapc(tick, pop = tick.c$grp)
+scatter(tick.dapc)
+scatter.colors = seasun(length(levels(tick.c$grp)))
+plot(pca1$scores[,1], pca1$scores[,2], col = scatter.colors[tick.c$grp], pch=16)
+```
+
+```{r assignmentProb}
+compoplot(tick.dapc)
+assignplot(tick.dapc)
+
+posterior.cluster<-data.frame(tick.dapc$posterior) # extract posterior group assignments
+posterior.cluster.named<-data.frame(cbind(row.names(posterior.cluster), posterior.cluster[,1], posterior.cluster[,2], posterior.cluster[,3], posterior.cluster[,4], posterior.cluster[,5])) # tweak the data structure to add sample names as a separate column (enables subsequent merging with data on collection site)
+names(posterior.cluster.named)<-c('TID', 'clust.1', 'clust.2', 'clust.3', 'clust.4', 'clust.5')
+posterior.cluster.named.spatial<-merge(posterior.cluster.named, metaData, by.x='TID', by.y='reconstructedID') # add site data to posteriors data frame by merging on the sample names
+
+posterior.cluster.named.spatial<-posterior.cluster.named.spatial[order(posterior.cluster.named.spatial$'5'),]
+
+short.pcns <- posterior.cluster.named.spatial[,2:6]
+row.names(short.pcns)<-row.names(posterior.cluster.named.spatial)
+ready.to.sort.pcns <- cbind(short.pcns, max.col(short.pcns))
+sorted.pcns <- ready.to.sort.pcns[order(ready.to.sort.pcns$max.col),]
+scatter.colors = seasun(length(levels(tick.c$grp)))
+png(file='~/Desktop/Flinders_RADseq/AssignmentProbability.png', height=25, width=40, res=300, units='cm')
+par(mar=c(6,4,2,8), xpd=TRUE)
+barplot(t(sorted.pcns[1:5]), col=scatter.colors, axes=FALSE, ylab='Probability of Membership',
+        xlim=c(0, length(posterior.cluster.named.spatial[,1])), 
+        space=0, col.axis='white') #for some reason #s still show on x-axis... make their color white)
+mtext(side=1, las=2, at=seq(0.5, length(sorted.pcns[,1])-0.5), cex=0.5, col=scatter.colors[sorted.pcns$max],
+      text=row.names(sorted.pcns))
+axis(side=2, las=1)
+legend(x=375, y=0.55, legend=c('1', '2', '3', '4', '5'), fill=scatter.colors, title='Cluster \nAssignment', bty="n")
+dev.off()
+```
+
+```{r consistency}
+sorted.by.name <- posterior.cluster.named.spatial[order(posterior.cluster.named.spatial$fixedID),]
+sorted.by.name.max <- cbind(sorted.by.name, max.col(sorted.by.name[2:6]))
+do.duplicates.match <- cbind(sorted.by.name.max$fixedID, sorted.by.name.max$max)
+counts<-table(do.duplicates.match[,1])
+dups <- counts[which(counts > 1)]
+n.unique <- c()
+for(n in 1:length(names(dups))){
+  subset.duplicates <- do.duplicates.match[which(do.duplicates.match[,1]==names(dups)[n]),]
+  n.unique <- c(n.unique, length(unique(subset.duplicates[,2])))
+}
+dups.counts.accuracy <- rbind(dups, n.unique)
+t.dca <- t(dups.counts.accuracy)
+consistency <- abs(1-t.dca[,1]/t.dca[,2])
+par(mar=c(4,4,2,2))
+hist(consistency)
+
+# fix the ID column...
+metaData$fixedID <- gsub('I', '1', metaData$ID)
+qualTime <- c()
+for(id in 1:length(metaData[,1])){
+  row = metaData[id,]
+  print(row$fixedID)
+  if(row$tissue == 'larvae'){
+    qualTime <- c(qualTime, 'new')
+  }else if(grepl('b', row$fixedID)){
+      qualTime <- c(qualTime, 'new')
+  }else if(as.numeric(as.character(row$fixedID)) < 381){
+      qualTime <- c(qualTime, 'old')
+  }else(qualTime <- c(qualTime, 'new'))
+}
+metaData$qualTime <- qualTime
+
+time <- c()
+for(t in 1:length(row.names(pca1$scores))){
+  m <- metaData[which(as.character(metaData$reconstructedID) == as.character(row.names(pca1$scores)[t])),]
+  #print(m)
+  time <- c(time, as.character(m$qualTime))
+}
+
+time.colors <- c('#74c476','#005a32') #idx 1 = new, idx 2 = old
+png('~/Desktop/Flinders_RADseq/PCA_colored_by_collection_time.png', width=15, height=15, res=300, unit='cm')
+plot(pca1$scores[,1], pca1$scores[,2], col = time.colors[as.factor(time)], pch=16,
+     xlab='PCA1', ylab='PCA2', las=1)
+legend(x='topright', legend=c('2015', '2010'), col=time.colors, pch=16, bty='n')
+dev.off()
+
+# does dapc pick up library, tissue type, or collection time?
+
+lib.dapc <- dapc(tick, pop = as.factor(lib))
+scatter(lib.dapc)
+
+tissue.dapc <- dapc(tick, pop = as.factor(tissue))
+scatter(tissue.dapc)
+
+time.dapc <- dapc(tick, pop = as.factor(time))
+scatter(time.dapc)
+```
+
+Time of collection (2010 vs. 2015) seems to matter a lot -- not surprisingly.
+We need to analyze the new and old ticks separately. We also have to look at geography.
+
+```{r geography}
+spatial.data <- read.csv('~/Dropbox/TrugosaTicks/DataSheets/MASTER_DATA_SHEET_AllSamples_Tab.csv')
+
+# use metaData and spatial.data and pca1 to combine pcs w/GPS coords
+eastings <- c()
+northings <- c()
+simpleID <- c()
+coll.date <- c()
+for(t in 1:length(row.names(pca1$scores))){
+  print(t)
+  #print(as.character(row.names(pca1$scores)[t]))
+  # look up the tick entry by full barcoded name
+  m <- metaData[which(as.character(metaData$reconstructedID) == as.character(row.names(pca1$scores)[t])),]
+  #print(m)
+  # look up the spatial data using the simple tick ID number
+  s <- spatial.data[which(as.character(m$fixedID) == as.character(spatial.data$TickNumber)),]
+  print(factor(s[,1]))
+  if(length(s[,1])>0){
+    print(factor(s[,1]))
+    eastings <- c(eastings, as.integer(as.character(s$Easting)))
+    northings <- c(northings, as.integer(as.character(s$Northing)))
+    simpleID <- c(simpleID, as.character(s$TickNumber))
+    coll.date <- c(coll.date, as.character(s$CollectionDate))
+  }else{
+    eastings <- c(eastings, NA)
+    northings <- c(northings, NA)
+    simpleID <- c(simpleID, NA)
+    } # apparently this else block does not get evaluated...
+}
+
+pca.spatial <- data.frame(cbind(simpleID,
+                                coll.date,
+                                scatter.colors[tick.c$grp], 
+                                eastings, northings))
+                                # tick.c$grp has same order as pca1$scores so the colors will be correct
+
+with.data <- pca.spatial[complete.cases(pca.spatial),]
+sunflowerplot(as.integer(as.character(with.data$eastings)), 
+     as.integer(as.character(with.data$northings)), 
+     seg.col=as.character(with.data[,3]), pch=16)
+
+with.data$uniqueCoord <- paste(with.data$eastings, with.data$northings, sep='_')
+color.coords <- cbind(as.character(with.data[,3]), with.data$uniqueCoord)
+summary.colors <- table(color.coords[,1], color.coords[,2])
+
+library(plotrix)
+#floating.pie(400000, 6180000,
+#             x=summary.colors[,1], radius = 5000)
+
+column.names <- dimnames(summary.colors)[[2]]
+
+plot(x=NA, y=NA, xlim=c(min(as.integer(as.character(with.data$eastings)))-1000,
+                max(as.integer(as.character(with.data$eastings)))+1000),
+         ylim=c(min(as.integer(as.character(with.data$northings)))-1000,
+                max(as.integer(as.character(with.data$northings)))+1000))
+for(column in 1:length(column.names)){
+  coords <- strsplit(column.names[column], split = '_')
+  u.coords <- unlist(coords)
+  floating.pie(as.integer(as.character(u.coords[1])), 
+               as.integer(as.character(u.coords[2])), 
+               x=summary.colors[,column], 
+               col=row.names(summary.colors),
+               radius = 3000)
+}
+
+
+# need to collapse into grid... 1ha grid:
+with.data$eastings<-as.numeric(as.character(with.data$eastings))
+with.data$northings<-as.numeric(as.character(with.data$northings))
+
+# make 10km x 10km grid
+# extend the range below the minimum coordinates and offset by 5 to prevent exact matches
+eastingSeq = seq(min(with.data$eastings)-10000, 
+                 max(with.data$eastings)+10000, 10000)
+northingSeq = seq(min(with.data$northings)-10000, 
+                  max(with.data$northings)+10000, 10000)
+assignedGrid = c()
+# there has got to be a better way of assigning points to grid cells than this...
+for(i in 1:(length(eastingSeq)-1)){
+  for(j in 1:(length(northingSeq)-1)){
+    inE <- with.data[which(eastingSeq[i] < with.data$eastings
+                                  & with.data$eastings <= eastingSeq[i+1]),]
+    #print(inE)
+    if(length(inE[,1])>0){
+      inN <- inE[which(northingSeq[j] < inE$northings 
+                       & inE$northings <= northingSeq[j+1]),]
+      if(length(inN[,1])>0){
+        #print(inN)
+        inN$gridE <- rep(i, length(inN[,1]))
+        inN$gridN <- rep(j, length(inN[,1]))
+        inN$centerEasting = rep((eastingSeq[i]+eastingSeq[i+1])/2, length(inN[,1]))
+        inN$centerNorthing = rep((northingSeq[j]+northingSeq[j+1])/2, length(inN[,1]))
+        print(paste(i, j, sep='-'))
+        print(inN)
+        assignedGrid = rbind(assignedGrid, inN)
+      }
+    }
+  }
+}
+
+assignedGrid$uniqueCoord <- paste(assignedGrid$eastings, assignedGrid$northings, sep='_')
+assignedGrid$uniqueGrid <- paste(assignedGrid$gridE, assignedGrid$gridN, sep='_')
+summary.colors.ha <- table(assignedGrid$V3, assignedGrid$uniqueGrid)
+
+column.names.ha <- dimnames(summary.colors.ha)[[2]]
+
+# organize collection time
+proper.dates <- strsplit(as.character(assignedGrid$coll.date), split = '-')
+yr <- c()
+for(p in 1:length(proper.dates)){
+  item <- proper.dates[[p]]
+  if(length(item)==3){
+    yr <- c(yr, proper.dates[[p]][3])
+  }else{yr <- c(yr, 'missing')}
+}
+assignedGrid$coll.year <- yr
+assignedGrid$uniqueCenter <- paste(assignedGrid$centerEasting, 
+                                   assignedGrid$centerNorthing, sep = '_')
+summary.colors.time <- table(assignedGrid$uniqueCenter, assignedGrid$coll.year)
+time.colors <- c('white', 'black', 'gray') 
+dimnames(summary.colors.time)[[2]] <- time.colors
+rns <- dimnames(summary.colors.time)[[1]]
+
+# make the plots
+#nf <- layout(matrix(c(1,2),2,2,byrow=TRUE), widths=c(16,8), heights=c(10,10), TRUE)
+#layout.show(nf)
+png(file='~/Desktop/Flinders_RADseq/ClusterPieChart_CoarseMap.png',
+    height=15, width=20, units='cm', res=300)
+par(mar=c(5,5,2,2))
+plot(x=NA, y=NA, xlim=c(min(as.integer(as.character(assignedGrid$centerEasting)))-1000,
+                max(as.integer(as.character(assignedGrid$centerEasting)))+50000),
+         ylim=c(min(as.integer(as.character(assignedGrid$centerNorthing)))-1000,
+                max(as.integer(as.character(assignedGrid$centerNorthing)))+20000),
+     axes=F, xlab='Relative Easting (km)', ylab='Relative Northing (km)')
+for(row in 1:length(rns)){
+  getC <- assignedGrid[which(assignedGrid$uniqueCenter == rns[row]),]
+  east <- as.integer(as.character(getC$centerEasting[1]))
+  north <- as.integer(as.character(getC$centerNorthing[1]))
+  use.colors <- c()
+  for(value in 1:length(summary.colors.time[row,])){
+    if(summary.colors.time[row, value] != 0){
+      use.colors <- c(use.colors, time.colors[value])
+    }
+  }
+  floating.pie(east, north, x=summary.colors.time[row,], 
+               col = use.colors, radius = 4500)
+}
+cluster.colors <- row.names(summary.colors.ha)
+for(column in 1:length(column.names.ha)){
+  getC <- assignedGrid[which(assignedGrid$uniqueGrid == column.names.ha[column]),]
+  east <- as.integer(as.character(getC$centerEasting[1]))
+  north <- as.integer(as.character(getC$centerNorthing[1]))
+  use.colors <- c()
+  for(value in 1:length(summary.colors.ha[,column])){
+    if(summary.colors.ha[value, column] != 0){
+      use.colors <- c(use.colors, cluster.colors[value])
+    }
+  }
+  floating.pie(east, north, x=summary.colors.ha[,column], 
+               col = use.colors, radius = 2800)
+}
+axis(side=1, at=eastingSeq, labels=(eastingSeq-min(eastingSeq))/1000)
+axis(side=2, at=northingSeq, labels=(northingSeq-min(northingSeq))/1000, las=1)
+
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+15000,
+     y=6250000, labels='Collection Year')
+floating.pie(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+                 6240000, x=1, col= 'black', radius = 4500)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+25000,
+     y=6240000, labels='2015', adj=0)
+draw.circle(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+                6240000, radius = 2800, col= 'white')
+floating.pie(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+                 6240000-10000, x=1, col= 'gray', radius = 4500)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+25000,
+     y=6240000-10000, labels='missing', adj=0)
+draw.circle(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+                6240000-10000, radius = 2800, col= 'white')
+floating.pie(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+                 6240000-20000, x=1, col= 'white', radius = 4500)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+25000,
+     y=6240000-20000, labels='2010', adj=0)
+draw.circle(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+                6240000-20000, radius = 2800, col= 'white', border='black')
+# legend for inner pies (inferred cluster)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+15000,
+     y=6240000-30000, labels='Cluster')
+floating.pie(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+             6240000-40000, x=1, col= cluster.colors[1], radius = 2800)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+25000,
+     y=6240000-40000, labels='1', adj=0)
+floating.pie(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+             6240000-50000, x=1, col= cluster.colors[2], radius = 2800)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+25000,
+     y=6240000-50000, labels='2', adj=0)
+floating.pie(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+             6240000-60000, x=1, col= cluster.colors[3], radius = 2800)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+25000,
+     y=6240000-60000, labels='3', adj=0)
+floating.pie(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+             6240000-70000, x=1, col= cluster.colors[4], radius = 2800)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+25000,
+     y=6240000-70000, labels='4', adj=0)
+floating.pie(max(as.integer(as.character(assignedGrid$centerEasting)))+15000, 
+             6240000-80000, x=1, col= cluster.colors[5], radius = 2800)
+text(x=max(as.integer(as.character(assignedGrid$centerEasting)))+25000,
+     y=6240000-80000, labels='5', adj=0)
+dev.off()
+
+# helpful: http://rgraphics.limnology.wisc.edu/rmargins_layout.php
+require(maptools)
+require(ggplot2)
+
+murray <- readShapePoly('~/Downloads/WATER_RiverMurray_shp/WATER_RiverMurray.shp')
+mf <- fortify(murray)
+proj4string(mf)<-CRS("+proj=longlat +datum=WGS84")
+mf_UTM<-spTransform(mf, CRS("+proj=utm +zone=54 +south +ellps=WGS84"))
+
+points(mf$long, mf$lat)
+```
