@@ -1,0 +1,31 @@
+---
+title: "flinders_radseq_description"
+author: "Kelly Pierce"
+date: "October 26, 2016"
+output: html_document
+---
+
+```{r}
+
+legs.raw<-read.table('~/Desktop/Flinders_RADseq/wordcounts_legs.txt')
+legs.raw[which(legs.raw[,1]==max(legs.raw[,1])),] #
+boxplot(legs.raw[1:146,1]/4) # 147 lines; last is total seq cout
+legs.raw$tissue <- 'Legs'
+legs.raw$read.counts <- legs.raw[,1]/4
+
+bodies.raw<-read.table('~/Desktop/Flinders_RADseq/wordcounts_bodies.txt')
+bodies.raw$tissue <- 'Bodies'
+bodies.raw$read.counts <- bodies.raw[,1]/4
+
+nonBH.bodies.raw<-read.table('~/Desktop/Flinders_RADseq/wordcounts_bodies_nonBH.txt')
+nonBH.bodies.raw$tissue <- 'Bodies (nonBH)'
+nonBH.bodies.raw$read.counts <- nonBH.bodies.raw[,1]/4
+
+legs.bodies.raw <- rbind(legs.raw[1:length(legs.raw[,1])-1,], 
+                         bodies.raw[1:length(bodies.raw[,1])-1,],
+                         nonBH.bodies.raw[1:length(nonBH.bodies.raw[,1])-1,])
+png(file='~/Desktop/Flinders_RADseq/BarcodeReadCounts.png', height=10, width=15, units='cm', res=300)
+par(mar=c(3,6,2,2))
+boxplot(legs.bodies.raw$read.counts ~ legs.bodies.raw$tissue, ylab='Demultiplexed, Quality Filtered\nRead Count per Sample')
+dev.off()
+```
